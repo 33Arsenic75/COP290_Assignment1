@@ -13,17 +13,27 @@ def get_stock_data(symbol, years):
     end_date = date.today()
     start_date = end_date.replace(year=end_date.year - years)
     # Fetch stock data using jugaad_data.nse
-    stock_info = stock_df(symbol=symbol, from_date=date(start_date.year, start_date.month, start_date.day),
-                           to_date=date(end_date.year, end_date.month, end_date.day), series="EQ")
+    try:
+        stock_info = stock_df(
+            symbol=symbol,
+            from_date=date(start_date.year, start_date.month, start_date.day),
+            to_date=date(end_date.year, end_date.month, end_date.day),
+            series="EQ"
+        )
+    except Exception as e:
+        print(f"An error occurred while fetching stock info: {e}")
+        stock_info = None  # or any default value or action you want
     # Extracting required columns
     # Convert the data dictionary to a Pandas DataFrame
     df = pd.DataFrame(stock_info)
-
+    #print(df)
     # Convert the 'Date' column to datetime format
     #df['Date'] = pd.to_datetime(df['Date'])
 
     # Date, Open Price, Close Price, High, Low, Last Trade Price (LTP), Volumne, Value and Number of Trades
     columns_to_remove = ['PREV. CLOSE', 'SERIES', '52W H', 'VWAP', 'SYMBOL', '52W L']
-    df = df.drop(columns=columns_to_remove)
+    for column in columns_to_remove:
+        if column in df.columns:
+            df = df.drop(columns=column)
     # print(df.columns)
     return df
