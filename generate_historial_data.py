@@ -12,7 +12,7 @@ from sqlalchemy import create_engine
 import csv
 
 def generate_db(df, symbol):
-    engine = create_engine(f'sqlite:///data/{symbol}.db')
+    engine = create_engine(f'sqlite:///historial_data/{symbol}.db')
     
     # Convert the DataFrame to a SQL table
     df.to_sql('stock_data_table', con=engine, if_exists='replace', index=False)
