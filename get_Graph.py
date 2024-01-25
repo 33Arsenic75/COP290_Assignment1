@@ -37,5 +37,5 @@ def get_Graph(symbol,years,selected_columns):
     # Save the plot
     plt.title('Stock Prices Over Time')
     plt.grid(True)
-    plt.savefig(f'static/{symbol}.png')
+    plt.savefig(f'static/{symbol}.png',transparent=True)
     return plt
