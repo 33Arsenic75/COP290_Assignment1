@@ -14,12 +14,13 @@ def real_time_price(ticker,exchage):
     class1 = "YMlKec fxKbKc" 
     class2 = "zzDege"
     class3 = ["P2Luy", "Ebnabc", "ZYVHBb"]
-    # "P2Luy Ebnabc ZYVHBb"
+    class4 = "JwB6zf"
     price = float(soup.find(class_ = class1).text.replace(",","").replace('₹',""))
     change  = float(soup.find('span',class_ = class3).text)
     company_name =  soup.find(class_=class2).text
-    print(company_name,price,change)
-    return company_name,price,change
+    percentage_change = float(soup.find(class_= class4).text.replace("%",""))
+    print(company_name,price,change,percentage_change)
+    return company_name,price,change,percentage_change
    
 if __name__=='__main__':
     df=pd.read_csv('ind_nifty50list.csv')
