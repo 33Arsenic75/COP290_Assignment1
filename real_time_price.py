@@ -15,14 +15,13 @@ def real_time_price(ticker,exchage):
     class2 = "zzDege"
     class3 = ["P2Luy", "Ebnabc", "ZYVHBb"]
     # "P2Luy Ebnabc ZYVHBb"
-    price = float(soup.find(class_ = class1).text.strip()[0:].replace(",",""))
+    price = float(soup.find(class_ = class1).text.replace(",","").replace('₹',""))
     change  = float(soup.find('span',class_ = class3).text)
     company_name =  soup.find(class_=class2).text
-    print(company_name)
-    print(price)
-    print(change)
+    print(company_name,price,change)
+    return company_name,price,change
    
-# if __name__=='__main__':
-#     for i in range(5):
-#         real_time_price('NIFTY_50',"INDEXNSE")
-#         time.sleep(1)
+if __name__=='__main__':
+    df=pd.read_csv('ind_nifty50list.csv')
+    for symbol,exchange in zip(df['Symbol'],df['Exchange']):
+        real_time_price(ticker=symbol,exchage=exchange)
