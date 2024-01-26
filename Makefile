@@ -3,8 +3,8 @@
 .PHONY: clean
 
 clean:
-	@if [ -d historial_data ]; then \
-		rm -r historial_data; \
+	@if [ -d historical_data ]; then \
+		rm -r historical_data; \
 	fi
-	mkdir historial_data
-	python3 generate_historial_data.py
+	mkdir historical_data
+	python3 generate_historical_data.py
