@@ -8,7 +8,7 @@ from dateutil import parser
 
 def intra_day_data(ISIN_CODE,symbol):
     start_date = datetime.now().date()
-    end_date = start_date - timedelta(days=1)
+    end_date = start_date- timedelta(days=0)
     url = f'https://api.upstox.com/v2/historical-candle/NSE_EQ%7C{ISIN_CODE}/1minute/{start_date}/{end_date}'
     headers = {
         'Accept': 'application/json'
