@@ -1,4 +1,6 @@
 Company Name,Industry,Symbol,Series,ISIN Code,Exchange
+Nifty_Fifty,Index,NIFTY_50,EQ,N.A.,INDEXNSE
+Sensex,Index,SENSEX,EQ,N.A.,INDEXBOM
 Adani Enterprises Ltd.,Metals & Mining,ADANIENT,EQ,INE423A01024,NSE
 Adani Ports and Special Economic Zone Ltd.,Services,ADANIPORTS,EQ,INE742F01042,NSE
 Apollo Hospitals Enterprise Ltd.,Healthcare,APOLLOHOSP,EQ,INE437A01024,NSE
@@ -48,5 +50,3 @@ Titan Company Ltd.,Consumer Durables,TITAN,EQ,INE280A01028,NSE
 UPL Ltd.,Chemicals,UPL,EQ,INE628A01036,NSE
 UltraTech Cement Ltd.,Construction Materials,ULTRACEMCO,EQ,INE481G01011,NSE
 Wipro Ltd.,Information Technology,WIPRO,EQ,INE075A01022,NSE
-Nifty_Fifty,Index,NIFTY_50,N.A.,N.A.,INDEXNSE
-Sensex,Index,SENSEX,N.A.,N.A.,INDEXBOM

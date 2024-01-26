@@ -36,4 +36,10 @@ def get_stock_data(symbol, years):
         if column in df.columns:
             df = df.drop(columns=column)
     # print(df.columns)
+    print(symbol)
     return df
+
+if __name__=='__main__':
+    df=pd.read_csv('ind_nifty50list.csv')
+    for symbol in df['Symbol']:
+        get_stock_data(symbol=symbol,years=1)
