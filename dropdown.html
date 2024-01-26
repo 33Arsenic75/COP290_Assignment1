@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Dropdown Table</h2>
+
+    <label for="selectTable">Select or type a table: </label>
+    <input list="tables" id="selectTable" oninput="resetErrorMessage()">
+    <datalist id="tables">
+        <option value="Adani Enterprises Ltd.">
+        <option value="Adani Ports and Special Economic Zone Ltd.">
+        <option value="Apollo Hospitals Enterprise Ltd.">
+        <option value="Asian Paints Ltd.">
+        <option value="Axis Bank Ltd.">
+        <option value="Bajaj Auto Ltd.">
+        <option value="Bajaj Finance Ltd.">
+        <option value="Bajaj Finserv Ltd.">
+        <option value="Bharat Petroleum Corporation Ltd.">
+        <option value="Bharti Airtel Ltd.">
+        <option value="Britannia Industries Ltd.">
+        <option value="Cipla Ltd.">
+        <option value="Coal India Ltd.">
+        <option value="Divi's Laboratories Ltd.">
+        <option value="Dr. Reddy's Laboratories Ltd.">
+        <option value="Eicher Motors Ltd.">
+        <option value="Grasim Industries Ltd.">
+        <option value="HCL Technologies Ltd.">
+        <option value="HDFC Bank Ltd.">
+        <option value="HDFC Life Insurance Company Ltd.">
+        <option value="Hero MotoCorp Ltd.">
+        <option value="Hindalco Industries Ltd.">
+        <option value="Hindustan Unilever Ltd.">
+        <option value="ICICI Bank Ltd.">
+        <option value="ITC Ltd.">
+        <option value="IndusInd Bank Ltd.">
+        <option value="Infosys Ltd.">
+        <option value="JSW Steel Ltd.">
+        <option value="Kotak Mahindra Bank Ltd.">
+        <option value="LTIMindtree Ltd.">
+        <option value="Larsen & Toubro Ltd.">
+        <option value="Maruti Suzuki India Ltd.">
+        <option value="NTPC Ltd.">
+        <option value="Nestle India Ltd.">
+        <option value="Oil & Natural Gas Corporation Ltd.">
+        <option value="Power Grid Corporation of India Ltd.">
+        <option value="Reliance Industries Ltd.">
+        <option value="SBI Life Insurance Company Ltd.">
+        <option value="State Bank of India">
+        <option value="Sun Pharmaceutical Industries Ltd.">
+        <option value="Tata Consultancy Services Ltd.">
+        <option value="Tata Consumer Products Ltd.">
+        <option value="Tata Motors Ltd.">
+        <option value="Tata Steel Ltd.">
+        <option value="Tech Mahindra Ltd.">
+        <option value="Titan Company Ltd.">
+        <option value="UPL Ltd.">
+        <option value="UltraTech Cement Ltd.">
+        <option value="Wipro Ltd.">
+    </datalist>
+
+    <div id="tableContainer"></div>
+    <div id="errorMessage"></div>
+
+    <script>
+        // Simulated database tables
+        const database = {
+            users: [
+                { id: 1, name: 'John Doe', age: 25 },
+                { id: 2, name: 'Jane Doe', age: 30 },
+                // Add more user data if needed
+            ],
+            products: [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+                // Add more product data if needed
+            ],
+            'adani enterprises ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'adani ports and special economic zone ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'apollo hospitals enterprise ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'asian paints ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'axis bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bajaj auto ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bajaj finance ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bajaj finserv ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bharat petroleum corporation ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bharti airtel ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'britannia industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'cipla ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'coal india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'divi\'s laboratories ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'dr. reddy\'s laboratories ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'eicher motors ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'grasim industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hcl technologies ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hdfc bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hdfc life insurance company ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hero motocorp ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hindalco industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hindustan unilever ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'icici bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'itc ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'indusind bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'infosys ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'jsw steel ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'kotak mahindra bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'ltimindtree ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'larsen & toubro ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'maruti suzuki india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'ntpc ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'nestle india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'oil & natural gas corporation ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'power grid corporation of india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'reliance industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'sbi life insurance company ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'state bank of india': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'sun pharmaceutical industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata consultancy services ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata consumer products ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata motors ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata steel ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tech mahindra ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'titan company ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'upl ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'ultratech cement ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'wipro ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ]    
+        };
+
+        // Function to load the selected table
+        function loadTable() {
+            const input = document.getElementById('selectTable');
+            const selectedTable = input.value.toLowerCase();
+            const tableData = database[selectedTable];
+            const tableContainer = document.getElementById('tableContainer');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Clear previous content
+            tableContainer.innerHTML = '';
+            errorMessage.innerHTML = '';
+
+            // Create and populate the table
+            const table = document.createElement('table');
+            const headerRow = table.insertRow();
+
+            // Create table header
+            if (tableData && tableData.length > 0) {
+                Object.keys(tableData[0]).forEach(columnName => {
+                    const th = document.createElement('th');
+                    th.textContent = columnName;
+                    headerRow.appendChild(th);
+                });
+
+                // Populate table rows
+                tableData.forEach(rowData => {
+                    const row = table.insertRow();
+                    Object.values(rowData).forEach(value => {
+                        const cell = row.insertCell();
+                        cell.textContent = value;
+                    });
+                });
+
+                // Append the table to the container
+                tableContainer.appendChild(table);
+            } else {
+                // Display a message when the selected table is not found
+                errorMessage.textContent = `Table '${selectedTable}' not found. Press Enter to confirm.`;
+            }
+        }
+
+        // Function to reset the error message
+        function resetErrorMessage() {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.innerHTML = '';
+        }
+
+        // Attach an event listener to the input for Enter key press
+        document.getElementById('selectTable').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                loadTable();
+            }
+        });
+    </script>
+</body>
+</html>

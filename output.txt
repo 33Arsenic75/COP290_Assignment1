@@ -1,0 +1,196 @@
+    'adani enterprises ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'adani ports and special economic zone ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'apollo hospitals enterprise ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'asian paints ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'axis bank ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'bajaj auto ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'bajaj finance ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'bajaj finserv ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'bharat petroleum corporation ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'bharti airtel ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'britannia industries ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'cipla ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'coal india ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'divi's laboratories ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'dr. reddy's laboratories ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'eicher motors ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'grasim industries ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'hcl technologies ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'hdfc bank ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'hdfc life insurance company ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'hero motocorp ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'hindalco industries ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'hindustan unilever ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'icici bank ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'itc ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'indusind bank ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'infosys ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'jsw steel ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'kotak mahindra bank ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'ltimindtree ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'larsen & toubro ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'maruti suzuki india ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'ntpc ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'nestle india ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'oil & natural gas corporation ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'power grid corporation of india ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'reliance industries ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'sbi life insurance company ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'state bank of india': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'sun pharmaceutical industries ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'tata consultancy services ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'tata consumer products ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'tata motors ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'tata steel ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'tech mahindra ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'titan company ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'upl ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'ultratech cement ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
+    'wipro ltd.': [
+        { id: 101, name: 'Product A', price: 50 },
+        { id: 102, name: 'Product B', price: 75 },
+    ],
