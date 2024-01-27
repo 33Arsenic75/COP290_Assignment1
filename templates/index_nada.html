@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StockMarket</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1> StockMarket </h1>
+        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
+        <a href="/about" class="navbtn btn-about">About</a>
+        <a href="/login" class="navbtn btn-login">Login/Register</a>
+    </div>
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        const navbar = document.querySelector('.navbar');
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            navbar.classList.toggle('dark-mode-navbar');
+            if (body.classList.contains('dark-mode')) {
+                darkModeToggle.innerText = 'Enable Light Mode';
+                darkModeToggle.style.backgroundColor = 'white';
+                darkModeToggle.style.color = 'black';
+            } else {
+                darkModeToggle.innerText = 'Enable Dark Mode';
+                darkModeToggle.style.backgroundColor = 'black';
+                darkModeToggle.style.color = 'white';
+            }
+        });
+    </script>
+    <div class="start-area">
+        <img src="{{ url_for('static', filename='stock4_pre.png') }}" style="max-width: 600px; max-height: 500px;" alt="img"/>
+        <h1 style="font-size: 4em;margin-bottom: -10px;">
+            Stock Market Simulator
+        </h1>
+        <h3>
+            Online platform to stimulate stocks and analyse trends
+        </h3>
+        <br/>
+        <a href="/login" class="navbtn btn-login">Get Started </a>
+    </div>
+</body>
+</html>

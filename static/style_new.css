@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    transition: background-color 0.5s ease;
+}
+.navbar {
+    display: flex;
+    position: sticky;
+    justify-content: space-between;
+    align-items: center;
+    background-color: whitesmoke;
+    width: 100%;
+    padding: 0.75rem;
+    box-sizing: border-box;
+}
+.navbar h1 {
+    text-align: left;
+    color: black;
+    margin: 0; /* Remove margin */
+    padding-left: 2px;
+    padding-top: 2px; /* Remove padding */
+}
+
+button, .navbtn {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block
+}
+
+.btn-about {
+    background-color: #00a9a9;
+    color: #fff;
+    font-size: large;
+}
+
+.btn-login {
+    background-color: #007bff;
+    color: #fff;
+    font-size: large;
+}
+
+.btn-logout {
+    background-color: red;
+    color: #fff;
+    font-size: large;
+}
+
+.navbtn:hover {
+    opacity: 2;
+}
+
+.navbtn + .navbtn {
+    margin-left: -620px;/
+}
+
+.dark-mode {
+    background-color: #333; /* Dark mode background color */
+    color: #fff; /* Dark mode text color */
+}
+
+.dark-mode-navbar {
+    background-color: #444; /* Dark mode navbar background color */
+}
+
+.dark-mode-navbar h1 {
+    color: #fff;
+}
+
+.start-area {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem;
+    box-sizing: border-box;
+}
+
+.stocks-area {
+    width: 100%;
+    padding-top: 1.75rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    box-sizing: border-box;
+}
+
+.outline-btn {
+    background-color: transparent;
+    border: 2px solid #444;
+    color: #444;
+}
+
+.outline-btn:hover {
+    background-color: #444;
+    color: white;
+    border: 2px solid #fff;
+}
+
+.dark-mode .outline-btn {
+    border-color: #fff; /* Change border color to white in dark mode */
+    color: #fff; /* Change text color to white in dark mode */
+}
+
+.dark-mode .outline-btn:hover {
+    background-color: #fff; /* Change background color to white on hover in dark mode */
+    color: #000; /* Change text color to black on hover in dark mode */
+}
+
+#selectTable {
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 500px;
+    height: 30px;
+}
+

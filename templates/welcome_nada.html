@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StockMarket</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1> StockMarket </h1>
+        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
+        <a href="/stocks_list" class="navbtn btn-about"> Explore Stocks </a>
+        <a href="/" class="navbtn btn-logout">Logout</a>
+    </div>
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        const navbar = document.querySelector('.navbar');
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            navbar.classList.toggle('dark-mode-navbar');
+            if (body.classList.contains('dark-mode')) {
+                darkModeToggle.innerText = 'Enable Light Mode';
+                darkModeToggle.style.backgroundColor = 'white';
+                darkModeToggle.style.color = 'black';
+            } else {
+                darkModeToggle.innerText = 'Enable Dark Mode';
+                darkModeToggle.style.backgroundColor = 'black';
+                darkModeToggle.style.color = 'white';
+            }
+        });
+    </script>
+    <div class="stocks-area">
+        <h1 style="font-size: 3em;">
+            STOCKS FOR YOU, {{username}}.
+            <hr style="opacity: 0.25;"/>
+        </h1>
+        <p style="color: grey; font-size: large;"><span id="remaining-time"></p>
+        <h3 style="font-size: 2em;">INDEX</h3>
+        <a href="/stock" class="navbtn outline-btn" style="text-align: left; font-size: large;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">NIFTY 50 </p>
+            <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p>
+        </a>
+        <h3 style="font-size: 2em;">TOP GAINERS</h3>      
+    </div>
+    <script>
+        function updateRemainingTime() {
+            const remainingTimeElement = document.getElementById('remaining-time');
+            const currentTime = new Date();
+            const targetTime = new Date(currentTime);
+            targetTime.setHours(15, 30, 0, 0); // 3:30 PM
+            const textChange = `MARKET CLOSES AT 3.30 PM`;
+            const textNoChange = `MARKET OPENS AT 9.15 AM`;
+    
+            if (currentTime > targetTime) {
+                targetTime.setDate(targetTime.getDate() + 1);
+            }
+    
+            // Check if the current time is before the market opens (9:15 AM)
+            if (currentTime.getHours() < 9 || (currentTime.getHours() === 9 && currentTime.getMinutes() < 15 || currentTime.getHours() > 15 || currentTime.getHours()===15 && currentTime.getMinutes() > 30)) {
+                remainingTimeElement.textContent = textNoChange;
+            } else {
+                remainingTimeElement.textContent = textChange;
+            }
+        }
+        setInterval(updateRemainingTime, 1000);
+        updateRemainingTime();
+    </script>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const prevValue = parseFloat("{{prev}}");
+            const arrowIcon = document.getElementById('arrow-icon');
+            const arrowPath = document.getElementById('arrow-path');
+            const prices = document.getElementById('priceline');
+    
+            // Check the sign of prevValue
+            if (prevValue > 0) {
+                // Positive change, set arrow icon to up
+                arrowIcon.classList.add('bi-caret-up-fill');
+                arrowIcon.classList.remove('bi-caret-down-fill');
+                arrowIcon.style.fill = "green";
+                prices.style.color = "green";
+                arrowPath.setAttribute('d', 'M7.247 4.86 2.451 10.342C1.885 10.987 2.345 12 3.204 12h9.592a1 1 0 0 1 .753-1.659l-4.796-5.48a1 1 0 0 1-1.506 0z');
+            } else if (prevValue < 0) {
+                // Negative change, set arrow icon to down
+                arrowIcon.classList.add('bi-caret-down-fill');
+                arrowIcon.classList.remove('bi-caret-up-fill');
+                arrowIcon.style.fill = "red";
+                prices.style.color = "red";
+                arrowPath.setAttribute('d', 'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z');
+            } else {
+                // No change, hide the arrow icon
+                arrowIcon.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
