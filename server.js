@@ -24,7 +24,7 @@ app.get('/data', (req, res) => {
       /// console.error(err);
       res.status(500).json({ error: 'Internal Server Error' });
     } else {
-      console.log(rows)
+      /// console.log(rows)
       res.json(rows);
     }
   });

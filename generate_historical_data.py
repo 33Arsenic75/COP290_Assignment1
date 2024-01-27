@@ -10,6 +10,7 @@ import sys
 from get_stock_data import get_stock_data
 from sqlalchemy import create_engine
 import csv
+import concurrent.futures
 
 def generate_db(df, symbol,company_name):
     engine = create_engine(f'sqlite:///historical_data/{company_name}.db')
@@ -17,12 +18,28 @@ def generate_db(df, symbol,company_name):
     # Convert the DataFrame to a SQL table
     df.to_sql('stock_data_table', con=engine, if_exists='replace', index=False)
 
+def process_stock_data(row):
+    if row['Exchange'] != 'NSE':
+        return None
+
+    symbol = row['Symbol']
+    company_name = row['Company Name']
+    
+    df = get_stock_data(symbol=symbol, years=10)
+    generate_db(df, symbol, company_name)
+
 if __name__ == '__main__':
     with open('ind_nifty50list.csv', 'r') as file:
         csv_reader = csv.DictReader(file)
-        for row in csv_reader:
-            if row['Exchange'] != 'NSE':
-                continue
-            #print(row['Symbol'])
-            df = get_stock_data(symbol=row['Symbol'], years=40)
-            generate_db(df, row['Symbol'],row['Company Name'])
+
+        # Using ThreadPoolExecutor for parallel processing
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            # Submit tasks for each row in the CSV file
+            futures = [executor.submit(process_stock_data, row) for row in csv_reader]
+
+            # Wait for all tasks to complete
+            concurrent.futures.wait(futures)
+            
+            # Optional: You can collect results or handle exceptions if needed
+            # results = [future.result() for future in futures]
+            # handle_results(results)

@@ -25,15 +25,16 @@ def real_time_price(ticker,exchage):
         pe_ratio = float(soup.find_all(class_ = class6)[4].text)
     except:
         pe_ratio = None
-    print(company_name,price,change,percentage_change,pe_ratio)
+    # print(company_name,price,change,percentage_change,pe_ratio)
     return company_name,price,change,percentage_change,pe_ratio
 
-# <div class="P6K39c">28.31</div>
 
-if __name__=='__main__':
+def fetch_real_time():
     df=pd.read_csv('ind_nifty50list.csv')
-    # real_time_price('INFY','NSE')
+    dict={}
     for symbol,exchange,exchange in zip(df['Symbol'],df['Exchange'],df['Exchange']):
         if(exchange!='NSE'):
             continue
-        real_time_price(ticker=symbol,exchage=exchange)
+        company_name,price,change,percentage_change,pe_ratio=real_time_price(ticker=symbol,exchage=exchange)
+        dict[company_name]=(price,change,percentage_change,pe_ratio)
+    return dict

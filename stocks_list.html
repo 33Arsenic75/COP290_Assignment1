@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StockMarket</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1> StockMarket </h1>
+        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
+        <a href="/dashboard" class="navbtn btn-about">  Back to Dashboard </a>
+        <a href="/" class="navbtn btn-logout">Logout</a>
+    </div>
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        const navbar = document.querySelector('.navbar');
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            navbar.classList.toggle('dark-mode-navbar');
+            if (body.classList.contains('dark-mode')) {
+                darkModeToggle.innerText = 'Enable Light Mode';
+                darkModeToggle.style.backgroundColor = 'white';
+                darkModeToggle.style.color = 'black';
+            } else {
+                darkModeToggle.innerText = 'Enable Dark Mode';
+                darkModeToggle.style.backgroundColor = 'black';
+                darkModeToggle.style.color = 'white';
+            }
+        });
+    </script>
+    <div class="stocks-area">
+        <div style="font-size: 3.5em;">NIFTY STOCKS</div>
+        <hr style="opacity: 0.25;"/>
+        <input list="tables" id="selectTable" oninput="resetErrorMessage()" placeholder="Select stocks">
+        <datalist id="tables">
+            <option value="Adani Enterprises Ltd.">
+            <option value="Adani Ports and Special Economic Zone Ltd.">
+            <option value="Apollo Hospitals Enterprise Ltd.">
+            <option value="Asian Paints Ltd.">
+            <option value="Axis Bank Ltd.">
+            <option value="Bajaj Auto Ltd.">
+            <option value="Bajaj Finance Ltd.">
+            <option value="Bajaj Finserv Ltd.">
+            <option value="Bharat Petroleum Corporation Ltd.">
+            <option value="Bharti Airtel Ltd.">
+            <option value="Britannia Industries Ltd.">
+            <option value="Cipla Ltd.">
+            <option value="Coal India Ltd.">
+            <option value="Divi's Laboratories Ltd.">
+            <option value="Dr. Reddy's Laboratories Ltd.">
+            <option value="Eicher Motors Ltd.">
+            <option value="Grasim Industries Ltd.">
+            <option value="HCL Technologies Ltd.">
+            <option value="HDFC Bank Ltd.">
+            <option value="HDFC Life Insurance Company Ltd.">
+            <option value="Hero MotoCorp Ltd.">
+            <option value="Hindalco Industries Ltd.">
+            <option value="Hindustan Unilever Ltd.">
+            <option value="ICICI Bank Ltd.">
+            <option value="ITC Ltd.">
+            <option value="IndusInd Bank Ltd.">
+            <option value="Infosys Ltd.">
+            <option value="JSW Steel Ltd.">
+            <option value="Kotak Mahindra Bank Ltd.">
+            <option value="LTIMindtree Ltd.">
+            <option value="Larsen & Toubro Ltd.">
+            <option value="Maruti Suzuki India Ltd.">
+            <option value="NTPC Ltd.">
+            <option value="Nestle India Ltd.">
+            <option value="Oil & Natural Gas Corporation Ltd.">
+            <option value="Power Grid Corporation of India Ltd.">
+            <option value="Reliance Industries Ltd.">
+            <option value="SBI Life Insurance Company Ltd.">
+            <option value="State Bank of India">
+            <option value="Sun Pharmaceutical Industries Ltd.">
+            <option value="Tata Consultancy Services Ltd.">
+            <option value="Tata Consumer Products Ltd.">
+            <option value="Tata Motors Ltd.">
+            <option value="Tata Steel Ltd.">
+            <option value="Tech Mahindra Ltd.">
+            <option value="Titan Company Ltd.">
+            <option value="UPL Ltd.">
+            <option value="UltraTech Cement Ltd.">
+            <option value="Wipro Ltd.">
+        </datalist>
+
+        <div id="tableContainer"></div>
+        <div id="errorMessage"></div>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">ADANI ENTERPRISES LTD.</p>
+                <img src="{{ url_for('static', filename='adanient.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <div id="Adani Enterprises Ltd">
+
+            </div>
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">ADANI PORTS AND SPECIAL ECONOMIC ZONES LTD.</p>
+                <img src="{{ url_for('static', filename='adanisez.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <div id="Adani Ports and Special Economic Zone Ld">
+            </div>
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">APOLLO HOSPITALS ENTERPRISES LTD.</p>
+                <img src="{{ url_for('static', filename='apollo.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">ASIAN PAINTS LTD.</p>
+                <img src="{{ url_for('static', filename='asian.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">AXIS BANK LTD.</p>
+                <img src="{{ url_for('static', filename='axis.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">BAJAJ AUTO LTD.</p>
+                <img src="{{ url_for('static', filename='bajaj.webp') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">BAJAJ FINANCE LTD.</p>
+                <img src="{{ url_for('static', filename='bajajfinance.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">BAJAJ FINSERV LTD.</p>
+                <img src="{{ url_for('static', filename='bajajfin.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">BHARAT PETROLUEM CORPORATION LTD.</p>
+                <img src="{{ url_for('static', filename='bol.jpg') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">BHARTI AIRTEL LTD.</p>
+                <img src="{{ url_for('static', filename='airtel.png') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">BHARAT PETROLUEM CORPORATION LTD.</p>
+                <img src="{{ url_for('static', filename='bol.jpg') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+        <br/>
+        <br/>
+        <a href="/stock_particular" class="navbtn outline-btn" style="text-align: left; font-size: large; width:600px" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Current Price : {{price}}; Compare to prev. close : {{prev}} ({{percentage_change}}%)">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;">BHARAT PETROLUEM CORPORATION LTD.</p>
+                <img src="{{ url_for('static', filename='bol.jpg') }}" style="max-width: 70px; max-height: 50px;" alt="img"/>
+            </div>
+            <!-- <p id="priceline" style="font-size: 1.0rem; color: green"> {{price}} <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg> {{prev}} ({{percentage_change}}%)</p> -->
+        </a>
+    </div>
+    <script>
+        // Simulated database tables
+        const database = {
+            products: [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'adani enterprises ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'adani ports and special economic zone ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'apollo hospitals enterprise ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'asian paints ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'axis bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bajaj auto ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bajaj finance ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bajaj finserv ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bharat petroleum corporation ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'bharti airtel ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'britannia industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'cipla ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'coal india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'divi\'s laboratories ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'dr. reddy\'s laboratories ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'eicher motors ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'grasim industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hcl technologies ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hdfc bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hdfc life insurance company ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hero motocorp ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hindalco industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'hindustan unilever ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'icici bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'itc ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'indusind bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'infosys ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'jsw steel ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'kotak mahindra bank ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'ltimindtree ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'larsen & toubro ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'maruti suzuki india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'ntpc ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'nestle india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'oil & natural gas corporation ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'power grid corporation of india ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'reliance industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'sbi life insurance company ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'state bank of india': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'sun pharmaceutical industries ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata consultancy services ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata consumer products ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata motors ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tata steel ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'tech mahindra ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'titan company ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'upl ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'ultratech cement ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ],
+            'wipro ltd.': [
+                { id: 101, name: 'Product A', price: 50 },
+                { id: 102, name: 'Product B', price: 75 },
+            ]    
+        };
+
+        // Function to load the selected table
+        function loadTable() {
+            const input = document.getElementById('selectTable');
+            const selectedTable = input.value.toLowerCase();
+            const tableData = database[selectedTable];
+            const tableContainer = document.getElementById('tableContainer');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Clear previous content
+            tableContainer.innerHTML = '';
+            errorMessage.innerHTML = '';
+
+            // Create and populate the table
+            const table = document.createElement('table');
+            const headerRow = table.insertRow();
+
+            // Create table header
+            if (tableData && tableData.length > 0) {
+                Object.keys(tableData[0]).forEach(columnName => {
+                    const th = document.createElement('th');
+                    th.textContent = columnName;
+                    headerRow.appendChild(th);
+                });
+
+                // Populate table rows
+                tableData.forEach(rowData => {
+                    const row = table.insertRow();
+                    Object.values(rowData).forEach(value => {
+                        const cell = row.insertCell();
+                        cell.textContent = value;
+                    });
+                });
+
+                // Append the table to the container
+                tableContainer.appendChild(table);
+            } else {
+                // Display a message when the selected table is not found
+                errorMessage.textContent = `Table '${selectedTable}' not found. Press Enter to confirm.`;
+            }
+        }
+
+        // Function to reset the error message
+        function resetErrorMessage() {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.innerHTML = '';
+        }
+
+        document.getElementById('selectTable').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                loadTable();
+            }
+        });
+    </script>
+    <div id="data_container"></div>
+
+    <script>
+        // Function to update data
+        function updateData() {
+            fetch('/update_data')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the data in the HTML
+                    var data_container = document.getElementById('data_container');
+                    console.log(data)
+                    data_container.innerHTML = '';
+                    data_container.textContent = JSON.stringify(data);
+                    //console.log(data_container.textContent)
+                    var hi = document.getElementById("Adani Enterprises Ltd");
+                    // Check if the property exists before accessing its value
+                    for (var company_name in data){
+                        var elem = document.getElementById(company_name);
+                        elem.textContent = data[company_name][0];
+                    }
+
+                    /// if (data["Adani Enterprises Ltd"]) {
+                    ///    hi.textContent = data["Adani Enterprises Ltd"][0];
+                    ///    console.log(hi.textContent);
+                    ///} else {
+                    ///    console.error('Data for "Adani Enterprises Ltd" not found.');
+                    ///}
+                })
+                .catch(error => {
+                    console.error('Error updating data:', error);
+                })
+        }
+
+        // Update data every 5 seconds (adjust the interval as needed)
+        setInterval(updateData, 1000);
+
+        // Initial data update
+        updateData();
+    </script>
+</body>
+</html>
