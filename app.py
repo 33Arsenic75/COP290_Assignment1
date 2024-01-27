@@ -1,14 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from real_time_price import real_time_price
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with your actual secret key
+app = Flask(__name__, static_url_path="/static")
+app.secret_key = "1234"  # Replace with your actual secret key
 
 # Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
+
 
 # User Model
 class User(db.Model):
@@ -16,56 +18,118 @@ class User(db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
 
+
 # Initialize Database within Application Context
 with app.app_context():
     db.create_all()
 
-@app.route('/')
-def index():
-    return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route("/")
+def index():
+    return render_template("index_nada.html")
+
+@app.route('/update_data')
+def update_data():
+    # Fetch new data and update the dynamic_data dictionary
+    from real_time_price import fetch_real_time
+    dict=fetch_real_time()
+    return dict
+
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        hashed_password = generate_password_hash(password, method="pbkdf2:sha256")
 
         new_user = User(username=username, password_hash=hashed_password)
         db.session.add(new_user)
         db.session.commit()
 
-        flash('Registration successful! Please login.')
-        return redirect(url_for('index'))
+        flash("Registration successful! Please login.")
+        return redirect(url_for("index"))
 
-    return render_template('register.html')
+    return render_template("register.html")
 
-@app.route('/login', methods=['POST'])
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    username = request.form['username']
-    password = request.form['password']
-    user = User.query.filter_by(username=username).first()
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        user = User.query.filter_by(username=username).first()
 
-    if user and check_password_hash(user.password_hash, password):
-        session['user_id'] = user.id
-        session['username'] = user.username
-        return redirect(url_for('dashboard'))
+        if user and check_password_hash(user.password_hash, password):
+            session["user_id"] = user.id
+            session["username"] = user.username
+            return redirect(url_for("dashboard"))
+        else:
+            flash("Invalid username or password")
+            return redirect(url_for("index"))
     else:
-        flash('Invalid username or password')
-        return redirect(url_for('index'))
+        return render_template("login.html")
 
-@app.route('/dashboard')
+
+@app.route("/dashboard")
 def dashboard():
-    if 'user_id' in session:
-        return render_template('welcome.html', username=session['username'])
+    if "user_id" in session:
+        company_name,price,change,percentage_change,pe_ratio = real_time_price(
+            "NIFTY_50", "INDEXNSE"
+        )
+        return render_template(
+            "welcome_nada.html",
+            username=session["username"],
+            price=price,
+            prev=change,
+            percentage_change=percentage_change,
+        )
     else:
-        return redirect(url_for('index'))
+        return redirect(url_for("index"))
 
-@app.route('/logout')
+
+@app.route("/stock")
+def stock():
+    if "user_id" in session:
+        company_name,price,change,percentage_change,pe_ratio = real_time_price(
+            "NIFTY_50", "INDEXNSE"
+        )
+        return render_template(
+            "stock.html",
+            username=session["username"],
+            price=price,
+            prev=change,
+            percentage_change=percentage_change,
+        )
+    else:
+        return redirect(url_for("index"))
+
+
+@app.route("/stocks_list", methods=["GET", "POST"])
+def stocks_list():
+    return render_template("stocks_list.html")
+    # data = request.get_json()
+    # text = data["text"]
+
+    # if "user_id" in session:
+    #     company_name, current_price, change, percentage_change = real_time_price(
+    #         text, "NSE"
+    #     )
+    #     return render_template(
+    #         "stocks_list.html",
+    #         price=current_price,
+    #         prev=change,
+    #         percentage_change=percentage_change,
+    #     )
+    # else:
+    #     return redirect(url_for("index"))
+
+
+@app.route("/logout")
 def logout():
-    session.pop('user_id', None)
-    session.pop('username', None)
-    return redirect(url_for('index'))
+    session.pop("user_id", None)
+    session.pop("username", None)
+    return redirect(url_for("index"))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
