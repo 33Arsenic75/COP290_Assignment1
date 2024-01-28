@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from real_time_price import real_time_price
+from information import stock_name_info
 
 app = Flask(__name__, static_url_path="/static")
 app.secret_key = "1234"  # Replace with your actual secret key
@@ -27,6 +28,15 @@ with app.app_context():
 @app.route("/")
 def index():
     return render_template("index_nada.html")
+
+
+@app.route("/update_data")
+def update_data():
+    # Fetch new data and update the dynamic_data dictionary
+    from real_time_price import fetch_real_time
+
+    dict = fetch_real_time()
+    return dict
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -67,13 +77,13 @@ def login():
 @app.route("/dashboard")
 def dashboard():
     if "user_id" in session:
-        company_name, current_price, change, percentage_change = real_time_price(
+        company_name, price, change, percentage_change, pe_ratio = real_time_price(
             "NIFTY_50", "INDEXNSE"
         )
         return render_template(
             "welcome_nada.html",
             username=session["username"],
-            price=current_price,
+            price=price,
             prev=change,
             percentage_change=percentage_change,
         )
@@ -84,13 +94,13 @@ def dashboard():
 @app.route("/stock")
 def stock():
     if "user_id" in session:
-        company_name, current_price, change, percentage_change = real_time_price(
+        company_name, price, change, percentage_change, pe_ratio = real_time_price(
             "NIFTY_50", "INDEXNSE"
         )
         return render_template(
             "stock.html",
             username=session["username"],
-            price=current_price,
+            price=price,
             prev=change,
             percentage_change=percentage_change,
         )
@@ -101,21 +111,17 @@ def stock():
 @app.route("/stocks_list", methods=["GET", "POST"])
 def stocks_list():
     return render_template("stocks_list.html")
-    # data = request.get_json()
-    # text = data["text"]
 
-    # if "user_id" in session:
-    #     company_name, current_price, change, percentage_change = real_time_price(
-    #         text, "NSE"
-    #     )
-    #     return render_template(
-    #         "stocks_list.html",
-    #         price=current_price,
-    #         prev=change,
-    #         percentage_change=percentage_change,
-    #     )
-    # else:
-    #     return redirect(url_for("index"))
+
+@app.route("/stock_particular", methods=["GET", "POST"])
+def stock_particular():
+    stock_name = request.args.get("stock_name")
+    picture = stock_name_info(stock_name)
+    return render_template(
+        "stock_particular.html",
+        stock_name=stock_name,
+        picture=picture,
+    )
 
 
 @app.route("/logout")
