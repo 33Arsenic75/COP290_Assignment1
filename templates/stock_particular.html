@@ -31,9 +31,144 @@
         });
     </script>
     <div class="stocks-area">
-        <div style="font-size: 2em; font-weight: 500;">{{stock_name}}</div>
+        <img src="data:image/png;base64,{{ picture }}" width="70px" alt="PNG Image"/>
+        <br/>
+        <br/>
+        <div style="font-size: 2em; font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"> {{stock_name}}</div>
         <hr style="opacity: 0.25;"/>
-        <img src="data:image/png;base64,{{ picture }}" width="60px" alt="PNG Image">
+        <div>
+            <span style="font-size: 2.75em;">₹ {{price}}</span>
+            <div id="entire" style="background-color: rgb(224, 240, 219); display: inline-block; padding: 10px; border-radius: 5px; margin-left: 20px; margin-bottom: 10px;">
+                <span id="price" style="font-size: 1.25em; color: red;"> <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                    </svg> {{percentage_change}}%</span>
+            </div>
+            <span id="price-change" style="display: inline-block; padding: 10px; border-radius: 5px; background-color:red; font-size: 1.25em; color: white;"> {{change}} Today</span>
+        </div>
+        <div class="information">
+            <p style="display: flex; justify-content: space-between;">
+                <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">PREVIOUS CLOSING</span>
+                <span>{{prev}}</span>
+            </p>
+            <hr style="opacity: 0.12;"/>
+            <p style="display: flex; justify-content: space-between;">
+                <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">P/E RATIO</span>
+                <span>{{pe_ratio}}</span>
+            </p>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const prevValue = parseFloat("{{change}}");
+                const arrowIcon = document.getElementById('arrow-icon');
+                const arrowPath = document.getElementById('arrow-path');
+                const prices = document.getElementById('price');
+                const bck = document.getElementById('entire');
+                const chng = document.getElementById('price-change');
+        
+                // Check the sign of prevValue
+                if (prevValue > 0) {
+                    // Positive change, set arrow icon to up
+                    arrowIcon.classList.add('bi-caret-up-fill');
+                    arrowIcon.classList.remove('bi-caret-down-fill');
+                    arrowIcon.style.fill = "green";
+                    prices.style.color = "green";
+                    chng.style.backgroundColor = "rgb(8, 117, 15)";
+                    entire.style.backgroundColor = "rgb(224, 240, 219)";
+                    arrowPath.setAttribute('d', 'M7.247 4.86 2.451 10.342C1.885 10.987 2.345 12 3.204 12h9.592a1 1 0 0 1 .753-1.659l-4.796-5.48a1 1 0 0 1-1.506 0z');
+                } else if (prevValue < 0) {
+                    // Negative change, set arrow icon to down
+                    arrowIcon.classList.add('bi-caret-down-fill');
+                    arrowIcon.classList.remove('bi-caret-up-fill');
+                    entire.style.backgroundColor = "rgb(242, 233, 233)";
+                    arrowIcon.style.fill = "red";
+                    prices.style.color = "red";
+                    chng.style.backgroundColor = "rgb(178, 8, 8)";
+                    arrowPath.setAttribute('d', 'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z');
+                } else {
+                    // No change, hide the arrow icon
+                    arrowIcon.style.display = 'none';
+                }
+            });
+        </script>
+        <!-- <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" required>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" required>
+        <button onclick='fetchData()'>Fetch Data</button>
+        <div style="width: 600px; height: 450px;">
+            <canvas id="chartContainer"></canvas>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+    <script>
+        async function fetchData() {
+            try {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const stock = '{{stock_name}}';
+                console.log(stock);
+                const response = await fetch(`/query?stock=${stock}&startDate=${startDate}&endDate=${endDate}&stock=${stock}`,{
+                    method: 'POST',  // Use the POST method
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ startDate, endDate, stock })
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+        
+                const data = await response.json();
+        
+                console.log(data);
+        
+                const dates = data.map(entry => entry.date); 
+                const values = data.map(entry => entry.CLOSE);
+        
+                console.log('Dates:', dates);
+                console.log('Values:', values);
+        
+                const ctx = document.getElementById('chartContainer').getContext('2d');
+                const existingChart = Chart.getChart(ctx);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                const myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Values',
+                            data: values,
+                            borderColor: 'rgb(75, 192, 192)',
+                            borderWidth: 2,
+                            fill: false,
+                            pointStyle: 'none',
+                            pointRadius: 0,
+                        }],
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                },
+                            },
+                            y: {
+                                beginAtZero: false,
+                            },
+                        },
+                    },
+                });
+            } catch (error) {
+                console.error('Error fetching or processing data:', error);
+            }
+        }
+ 
+    </script> -->
 </body>
 </html>

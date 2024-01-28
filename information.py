@@ -73,7 +73,7 @@ def bajaj():
         return None
 
 
-def bajajfin():
+def bajajfinance():
     file_path = "static/bajajfinance.png"
     try:
         with open(file_path, "rb") as file:
@@ -85,8 +85,20 @@ def bajajfin():
         return None
 
 
+def bajajfin():
+    file_path = "static/bajajfin.png"
+    try:
+        with open(file_path, "rb") as file:
+            png_data = file.read()
+            png_base64 = base64.b64encode(png_data).decode("utf-8")
+        return png_base64
+    except FileNotFoundError:
+        print(f"File '{file_path}' not found.")
+        return None
+
+
 def bpl():
-    file_path = "static/bol.png"
+    file_path = "static/bpl.png"
     try:
         with open(file_path, "rb") as file:
             png_data = file.read()
@@ -578,146 +590,149 @@ def wipro():
 
 
 def stock_name_info(stock_name):
-    if stock_name == "ADANI ENTERPRISES LTD":
+    if stock_name == "Adani Enterprises Ltd":
         return adanient()
 
-    if stock_name == "ADANI PORTS AND SPECIAL ECONOMIC ZONES LTD":
+    if stock_name == "Adani Ports and Special Economic Zone Ld":
         return adanisez()
 
-    if stock_name == "APOLLO HOSPITALS ENTERPRISES LTD":
+    if stock_name == "Apollo Hospitals Enterprise Limited":
         return apollo()
 
-    if stock_name == "ASIAN PAINTS LTD":
+    if stock_name == "Asian Paints Ltd":
         return asian()
 
-    if stock_name == "AXIS BANK LTD":
+    if stock_name == "Axis Bank Ltd":
         return axis()
 
-    if stock_name == "BAJAJ AUTO LTD":
+    if stock_name == "Bajaj Auto Ltd":
         return bajaj()
 
-    if stock_name == "BAJAJ FINSERV LTD":
+    if stock_name == "Bajaj Finance Ltd":
+        return bajajfinance()
+
+    if stock_name == "Bajaj Finserv Ltd":
         return bajajfin()
 
-    if stock_name == "BHARAT PETROLUEM CORPORATION LTD":
+    if stock_name == "Bharat Petroleum Corporation Ltd":
         return bpl()
 
-    if stock_name == "BHARTI AIRTEL LTD":
+    if stock_name == "Bharti Airtel Ltd":
         return airtel()
 
-    if stock_name == "BRITANNIA INDUSTRIES LTD":
+    if stock_name == "Britannia Industries Ltd":
         return brit()
 
-    if stock_name == "CIPLA LTD":
+    if stock_name == "Cipla Ltd":
         return cipla()
 
-    if stock_name == "COAL INDIA LTD":
+    if stock_name == "Coal India Ltd":
         return coal_india()
 
-    if stock_name == "DIVI'S LABORATORIES LTD":
+    if stock_name == "Divi's Laboratories Ltd":
         return divi()
 
-    if stock_name == "DR. REDDY'S LABORATORIES LTD":
+    if stock_name == "Dr Reddy's Laboratories Ltd":
         return reddy()
 
-    if stock_name == "EICHER MOTORS LTD":
+    if stock_name == "Eicher Motors Ltd":
         return eicher()
 
-    if stock_name == "GRASIM INDUSTRIES LTD":
+    if stock_name == "Grasim Industries Ltd":
         return grasim()
 
-    if stock_name == "HCL TECHNOLOGIES LTD":
+    if stock_name == "HCL Technologies Ltd":
         return hcl()
 
-    if stock_name == "HDFC BANK LTD":
+    if stock_name == "HDFC Bank Ltd":
         return hdfc()
 
-    if stock_name == "HDFC LIFE INSURANCE COMPANY LTD":
+    if stock_name == "HDFC Life Insurance Company Ltd":
         return hdfclife()
 
-    if stock_name == "HERO MOTORCORP LTD":
+    if stock_name == "Hero MotoCorp Ltd":
         return hero()
 
-    if stock_name == "HINDALCO INDUSTRIES LTD":
+    if stock_name == "Hindalco Industries Ltd":
         return hindalco()
 
-    if stock_name == "HINDUSTAN UNILEVER LTD":
+    if stock_name == "Hindustan Unilever Ltd":
         return unilever()
 
-    if stock_name == "ICICI LTD":
+    if stock_name == "ICICI Bank Ltd":
         return icici()
 
-    if stock_name == "ITC LTD":
+    if stock_name == "ITC Ltd":
         return itc()
 
-    if stock_name == "INDUSIND BANK LTD":
+    if stock_name == "Indusind Bank Ltd":
         return indusind()
 
-    if stock_name == "INFOSYS LTD":
+    if stock_name == "Infosys Ltd":
         return infosys()
 
-    if stock_name == "JSW STEEL LTD":
+    if stock_name == "JSW Steel Limited":
         return jsw()
 
-    if stock_name == "KOTAK MAHINDRA BANK LTD":
+    if stock_name == "Kotak Mahindra Bank Ltd Fully Paid Ord. Shrs":
         return kotak()
 
-    if stock_name == "LTIMINDTREE LTD":
+    if stock_name == "LTIMindtree Ltd":
         return lti()
 
-    if stock_name == "LARSEN & TURBO LTD":
+    if stock_name == "Larsen and Toubro Ltd":
         return lt()
 
-    if stock_name == "MARUTI SUZUKI INDIA LTD":
+    if stock_name == "Maruti Suzuki India Ltd":
         return maruti()
 
-    if stock_name == "NTPC LTD":
+    if stock_name == "NTPC Ltd":
         return ntpc()
 
-    if stock_name == "NESTLE INDIA LTD":
+    if stock_name == "Nestle India Limited":
         return nestle()
 
-    if stock_name == "OIL AND NATURAL GAS CORPORATION LTD":
+    if stock_name == "Oil and Natural Gas Corporation Ltd":
         return ongc()
 
-    if stock_name == "POWER GRID CORPORATION OF INDIA LTD":
+    if stock_name == "Power Grid Corporation of India Ltd":
         return powergrid()
 
-    if stock_name == "RELIANCE INDUSTRIES LTD":
+    if stock_name == "Reliance Industries Ltd":
         return reliance()
 
-    if stock_name == "SBI LIFE INSURANCE COMPANY LTD":
+    if stock_name == "Sbi Life Insurance Company Ltd":
         return sbilife()
 
-    if stock_name == "STATE BANK OF INDIA":
+    if stock_name == "State Bank of India":
         return sbi()
 
-    if stock_name == "SUN PHARMACEUTICAL INDUSTRIES LTD":
+    if stock_name == "Sun Pharmaceutical Industries Ltd":
         return sun()
 
-    if stock_name == "TATA CONSULTANCY SERVICES LTD":
+    if stock_name == "Tata Consultancy Services Ltd":
         return tcs()
 
-    if stock_name == "TATA CONSUMER PRODUCTS LTD":
+    if stock_name == "Tata Consumer Products Ltd":
         return tcp()
 
-    if stock_name == "TATA MOTORS LTD":
+    if stock_name == "Tata Motors Ltd Fully Paid Ord. Shrs":
         return tm()
 
-    if stock_name == "TATA STEEL LTD":
+    if stock_name == "Tata Steel Ltd":
         return tatasteel()
 
-    if stock_name == "TECH MAHINDRA LTD":
+    if stock_name == "Tech Mahindra Ltd":
         return techmahindra()
 
-    if stock_name == "TITAN COMPANY LTD":
+    if stock_name == "Titan Company Ltd":
         return titan()
 
-    if stock_name == "UPL LTD":
+    if stock_name == "UPL Ltd":
         return upl()
 
-    if stock_name == "ULTRATECH CEMENT LTD":
+    if stock_name == "UltraTech Cement Ltd":
         return ultratech()
 
-    if stock_name == "WIPRO LTD":
+    if stock_name == "Wipro Ltd":
         return wipro()

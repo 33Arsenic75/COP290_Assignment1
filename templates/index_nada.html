@@ -29,9 +29,39 @@
                 darkModeToggle.style.color = 'white';
             }
         });
+
+    window.addEventListener('scroll', handleScroll);
+
+    function handleScroll() {
+        const features = document.querySelector('.features');
+        const imag = document.getElementById('imag');
+        const tex = document.getElementById('tex');
+
+        if (isInViewport(features) && !features.classList.contains('fadein')) {
+            features.classList.add('fadein');
+        }
+
+        if (isInViewport(imag) && !imag.classList.contains('slideleft')) {
+            imag.classList.add('slideleft');
+        }
+
+        if (isInViewport(tex) && !tex.classList.contains('slideright')) {
+            tex.classList.add('slideright');
+        }
+    }
+
+    function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
     </script>
     <div class="start-area">
-        <img src="{{ url_for('static', filename='stock4_pre.png') }}" style="max-width: 600px; max-height: 500px;" alt="img"/>
+        <img src="{{ url_for('static', filename='stock4_pre.png') }}" style="animation: fadeIn 2s ease-in-out; max-width: 600px; max-height: 500px;" alt="img"/>
         <h1 style="font-size: 4em;margin-bottom: -10px;">
             Stock Market Simulator
         </h1>
@@ -40,6 +70,22 @@
         </h3>
         <br/>
         <a href="/login" class="navbtn btn-login">Get Started </a>
+        <br/>
+        <br/>
     </div>
+    <div class="features">
+        <img id="imag" src="{{ url_for('static', filename='stonks2.webp') }}" style="border-radius: 10px; max-width: 600px; max-height: 500px;" alt="img"/>
+        <p id="tex" style="padding: 30px; line-height: 30px;">
+            <span style="font-weight: 800; font-size: larger; text-align: end;">Features</span> <br/>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Integer faucibus eros sed magna fringilla consequat. Morbi vitae neque ut ligula tempor lobortis. 
+            Cras sed nibh volutpat dolor porta venenatis vitae nec nisl. Donec mattis molestie nunc id molestie. 
+            Suspendisse sodales augue id enim mattis ultricies. Vivamus condimentum tellus nec nunc suscipit, 
+            ac tempus velit finibus. Sed malesuada magna orci. Nunc ante risus, gravida et dolor eget, vehicula dictum nibh. 
+            Vestibulum eget pellentesque est, vel lobortis quam. Mauris convallis, elit id facilisis ultricies, odio justo venenatis nibh, 
+            vel tristique turpis velit a orci. Curabitur pulvinar nibh in auctor sagittis. Morbi id facilisis dui. 
+            Suspendisse ac consequat arcu. Nam et maximus nunc, in auctor eros. Duis pretium eu justo nec ultricies.</p>
+    </div>
+
 </body>
 </html>
