@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Add your common head content here -->
+</head>
+<body>
+    <h1>{% block heading %}{% endblock %}</h1>
+
+    <label for="selectTable">Select or type a table: </label>
+    <input list="tables" id="selectTable" oninput="resetErrorMessage()">
+    <datalist id="tables">
+        <!-- Your options go here -->
+    </datalist>
+
+    <div id="tableContainer"></div>
+    <div id="errorMessage"></div>
+
+    {% block content %}{% endblock %}
+
+    <script>
+        // Your JavaScript code goes here
+    </script>
+</body>
+</html>
