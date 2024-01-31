@@ -7,29 +7,12 @@
 <body>
     <div class="navbar">
         <h1> StockMarket </h1>
-        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
-        <a href="/dashboard" class="navbtn btn-about">  Back to Dashboard </a>
+        <a href="/compare_stock" class="navbtn btn-about"> Compare</a>
+        <a href="/filter" class="navbtn btn-about"> Filter </a>
+        <a href="/profile" class="navbtn btn-about"> Profile </a>
+        <a href="/dashboard" class="navbtn btn-about"> Back to Dashboard </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
-    <script>
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-        const navbar = document.querySelector('.navbar');
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            navbar.classList.toggle('dark-mode-navbar');
-            if (body.classList.contains('dark-mode')) {
-                darkModeToggle.innerText = 'Enable Light Mode';
-                darkModeToggle.style.backgroundColor = 'white';
-                darkModeToggle.style.color = 'black';
-            } else {
-                darkModeToggle.innerText = 'Enable Dark Mode';
-                darkModeToggle.style.backgroundColor = 'black';
-                darkModeToggle.style.color = 'white';
-            }
-        });
-    </script>
     <div class="stocks-area">
         <img src="data:image/png;base64,{{ picture }}" width="70px" alt="PNG Image"/>
         <br/>
@@ -51,18 +34,31 @@
         <div class="information">
             <p style="display: flex; justify-content: space-between;">
                 <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">PREVIOUS CLOSING</span>
-                <span>{{prev}}</span>
+                <span>₹ {{prev}}</span>
             </p>
             <hr style="opacity: 0.12;"/>
             <p style="display: flex; justify-content: space-between;">
                 <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">P/E RATIO</span>
                 <span>{{pe_ratio}}</span>
             </p>
+            <hr style="opacity: 0.12;"/>
             <input type="text" id="user_input" name="user_input" placeholder="No. of Stocks" style="padding: 10px; margin: 20px; margin-bottom: 10px; width:230px; text-align: center;">
             <div style="padding: 10px; margin-left: 10px; margin-right:10px; text-align: center;">
                 <button onclick="BUY()" style="color:white; background-color: green;">BUY</button>
                 <button onclick="SELL()" style="color:white; background-color: red;">SELL</button>
             </div>
+            <hr style="opacity: 0.12;"/>
+            <p style="display: flex; justify-content: space-between;">
+                <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">BALANCE</span>
+                <span>₹<span id="balance"></span></span>
+            </p>
+            <p style="display: flex; justify-content: space-between;">
+                <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">STOCKS</span>
+                <span id="bought_sold"></span>
+            </p>
+            <p style="display: flex; justify-content: space-between;">
+                <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><span id="response" style="text-align: center; "></span></span>
+            </p>
         </div>
         </div>
         <script>
@@ -126,7 +122,6 @@
         <br/>
     </div>
     </div>
-    <div>Balance: <span id="balance"></span></div>
     <script>
         function toggleHistoricalData() {
             var historicalElement = document.getElementById("historical");
@@ -152,16 +147,30 @@
         }
     </script>
     <script>
+        update_quantity();
+    
+        async function update_quantity() {
+            const stock = "{{stock_name}}";
+            const response = await fetch(`/get_quantity?stock=${stock}`);
+            const data = await response.json();
+            if (data) {
+                const quantity = data[0];
+                document.getElementById('bought_sold').innerText = quantity;
+            } else {
+                document.getElementById('bought_sold').innerText = "Unable to Access database. Please try again later.";
+            }
+        }
+    </script>
+    
+    <script>
         async function BUY(){
             update_balance();
+            update_quantity();
             const quantity = document.getElementById("user_input").value;
             const price = "{{price}}";
-            console.log(quantity,price);
             const stock = "{{stock_name}}";
             const user = "{{user_name}}";
             const balance = document.getElementById("balance").innerText;
-            console.log(balance);
-            console.log(user);
             const response = await fetch(`/BUY?quantity=${quantity}&price=${price}&stock=${stock}&user=${user}&balance=${balance}`,{
                 method: 'POST',  // Use the POST method
                 headers: {
@@ -170,14 +179,25 @@
                 body: JSON.stringify({ quantity,price, stock, user, balance })
             });
 
-            const Status = await response.text();
-            console.log(Status);
+            const responseData = await response.json(); // Parse the response as JSON
+            console.log(responseData); // Log the response data
+            // Access responseData.message and responseData.stock_quantity here
+
+            document.getElementById('response').innerText = responseData.message;
+            if (responseData.message == "BOUGHT SUCCESSFULLY!") {
+                document.getElementById('response').style.color = "green";
+            }
+            else {
+                document.getElementById('response').style.color = "red";
+            }
             update_balance();
+            update_quantity();
         }
     </script>
     <script>
         async function SELL(){
             update_balance();
+            update_quantity();
             const quantity = document.getElementById("user_input").value;
             const price = "{{price}}";
             console.log(quantity,price);
@@ -194,9 +214,17 @@
                 body: JSON.stringify({ quantity,price, stock, user, balance })
             });
 
-            const Status = await response.text();
-            console.log(Status);
+            const responseData = await response.json(); // Parse the response as JSON
+            document.getElementById('response').innerText = responseData.message;
+            if (responseData.message == "SOLD SUCCESSFULLY!") {
+                document.getElementById('response').style.color = "green";
+            }
+            else {
+                document.getElementById('response').style.color = "red";
+            }            
+            // document.getElementById('responded').innerText = responseData.message;
             update_balance();
+            update_quantity();
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

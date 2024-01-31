@@ -183,6 +183,13 @@ button, .navbtn {
     padding: 10px; 
 }
 
+.infotmat {
+    width: 200px;
+    border: 1px solid rgb(241, 241, 241);
+    border-radius: 5px;
+    padding: 10px; 
+}
+
 .info {
     width: 800px;
     border: 1px solid rgb(241, 241, 241);
@@ -191,13 +198,31 @@ button, .navbtn {
 }
 
 .profile-container {
-    text-align: center;
-    background-color: white;
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); */
     width: 700px;
     height:300px;
     margin: auto;
     margin-top: 80px;
+    opacity: 0.95;
+}
+
+.profile {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 30px 30px rgba(0, 0, 0, 0);
+    width: 250px;
+    height:270px;
+    padding: 20px;
+}
+
+.stocks {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 30px 30px rgba(0, 0, 0, 0);
+    width: 365px;
+    height:270px;
+    padding: 20px;
 }

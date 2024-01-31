@@ -4,39 +4,19 @@
     <title>StockMarket</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
 </head>
-<body>
+<body style="background-image: url(/static/compare.png); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(255, 255, 255, 0.5);">
     <div class="navbar">
         <h1> StockMarket </h1>
-        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
-        <a href="/dashboard" class="navbtn btn-about">  Back to Dashboard </a>
+        <a href="/stocks_list" class="navbtn btn-about"> Explore Stocks</a>
+        <a href="/dashboard" class="navbtn btn-about"> Dashboard </a>
+        <a href="/profile" class="navbtn btn-about"> Profile </a>
+        <a href="/filter" class="navbtn btn-about"> Filter </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
-    <script>
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-        const navbar = document.querySelector('.navbar');
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            navbar.classList.toggle('dark-mode-navbar');
-            if (body.classList.contains('dark-mode')) {
-                darkModeToggle.innerText = 'Enable Light Mode';
-                darkModeToggle.style.backgroundColor = 'white';
-                darkModeToggle.style.color = 'black';
-            } else {
-                darkModeToggle.innerText = 'Enable Dark Mode';
-                darkModeToggle.style.backgroundColor = 'black';
-                darkModeToggle.style.color = 'white';
-            }
-        });
-    </script>
     <div class="stocks-area">
-        <div style="font-size: 3.5em;">NIFTY STOCKS</div>
+        <div style="font-size: 3.5em;">COMPARE STOCKS</div>
         <hr style="opacity: 0.25;"/>
-        <div>
-            <button onclick="addStock()">ADD</button>
-            <button onclick="resetSelection()">RESET</button>
-        </div>
+        <br/>
         <input list="tables" id="selectTable" placeholder="Select stocks">
         <datalist id="tables">
             <option value='Adani Enterprises Ltd'>
@@ -95,10 +75,16 @@
         <input type="date" id="startDate" required>
         <label for="endDate">End Date:</label>
         <input type="date" id="endDate" required>
+        <br/>
+        <br/>
+        <div style="padding-bottom: 20px;">
+            <button onclick="addStock()" style="background-color: rgb(10, 170, 170); color: white;" >ADD</button>
+            <button onclick="resetSelection()">RESET</button>
+        </div>
     </div>
     <br/>
     <br/>
-    <div style="width: 600px; height: 450px;">
+    <div style="padding-left: 50px; width: 800px; height: 650px;">
         <canvas id="chartContainer"></canvas>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

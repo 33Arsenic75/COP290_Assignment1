@@ -4,11 +4,13 @@
     <title>StockMarket</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
 </head>
-<body>
+<body style="background-image: url(/static/welcome.png); background-size: contain; background-image: center;">
     <div class="navbar">
         <h1> StockMarket </h1>
-        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
-        <a href="/dashboard" class="navbtn btn-about">  Back to Dashboard </a>
+        <a href="/compare_stock" class="navbtn btn-about"> Compare</a>
+        <a href="/stocks_list" class="navbtn btn-about"> Filter </a>
+        <a href="/profile" class="navbtn btn-about"> Profile </a>
+        <a href="/dashboard" class="navbtn btn-about"> Back to Dashboard </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
     <script>

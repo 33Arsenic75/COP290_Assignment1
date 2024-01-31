@@ -4,45 +4,33 @@
     <title>StockMarket - Profile</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
 </head>
-<body>
+<body style="background-image: url(/static/bear_cute_bull.gif); background-size: cover; background-image: center; background-repeat: no-repeat;">
     <div class="navbar">
         <h1> StockMarket </h1>
-        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
         <a href="/stocks_list" class="navbtn btn-about"> Explore</a>
         <a href="/compare_stock" class="navbtn btn-about"> Compare</a>
-        <a href="/profile" class="navbtn btn-about"> Profile </a>
+        <a href="/filter" class="navbtn btn-about"> Filter</a>
+        <a href="/dashboard" class="navbtn btn-about"> Back to Dashboard </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
 
-    <div class="profile-container">
-        <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: rgb(176, 174, 174);">USER PROFILE</h2>
-        <img src="{{ url_for('static', filename='userpng.png') }}" style="max-width: 100px; max-height: 80px;" alt="img"/>
-        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.25em; font-weight: 600;"><span id="username">{{ username }}</span></p>
-        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">BALANCE : ₹ <span id="balance"></span></p>
-        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">Invested in stocks: <span id="invested"></span></p>
-        <div id="dynamicDataContainer"></div>
-        <!-- Add more content related to the user's profile here -->
+    <div class="profile-container" style="justify-content: space-between; display: flex;">
+        <div class="profile" style="background: linear-gradient(90deg, rgb(187, 235, 241), rgb(231, 231, 244), rgb(187, 233, 241));">
+        <h2 style="text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: rgb(2, 2, 60);">USER PROFILE</h2>
+        <div style="display: flex; justify-content: center; align-items: center;"><img src="{{ url_for('static', filename='userpng.png') }}" style="max-width: 100px; max-height: 80px;" alt="img"/></div>
+        <p style="color:rgb(2, 2, 60); text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.25em; font-weight: 600;"><span id="username">{{ username }}</span></p>
+        <!-- <hr style="opacity: 0.21;"/> -->
+        <p style="text-align: center; margin:auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; background-color: rgb(8, 52, 107); color: white; width: 200px; padding: 5px; border-radius: 5px;">BALANCE : ₹ <span id="balance"></span></p>
+        </div>
+        <div class="stocks" style="background: linear-gradient(90deg, rgb(187, 235, 241), rgb(231, 231, 244), rgb(187, 233, 241));">
+            <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">
+                <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; font-size: 1.5em;">STOCKS INVESTED</h2> 
+                <br/> 
+                <span id="dynamicDataContainer"></span> </p>
+        </div>
     </div>
 
     <script>
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-        const navbar = document.querySelector('.navbar');
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            navbar.classList.toggle('dark-mode-navbar');
-            if (body.classList.contains('dark-mode')) {
-                darkModeToggle.innerText = 'Enable Light Mode';
-                darkModeToggle.style.backgroundColor = 'white';
-                darkModeToggle.style.color = 'black';
-            } else {
-                darkModeToggle.innerText = 'Enable Dark Mode';
-                darkModeToggle.style.backgroundColor = 'black';
-                darkModeToggle.style.color = 'white';
-            }
-        });
-
         // Accessing the username and balance passed from the server-side
         const username = "{{ username }}";
         document.getElementById('username').innerText = username;
@@ -60,31 +48,51 @@
     </script>
     </script>
     <script>
-        async function money_invested(){
-            console.log("HI");
+        async function money_invested() {
             const response = await fetch('/Profit');
             const data = await response.json();
             console.log(data);
+            const containerDiv = document.createElement('div');
+            containerDiv.style.display = 'flex';
+            containerDiv.style.justifyContent = 'space-between';
+            containerDiv.style.flexDirection = 'column'; // Display items vertically
+            // containerDiv.style.alignItems = 'center'; // Center items horizontally
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
-                    const value = data[key];
+                    const value = data[key][0];
                     console.log(`${key}: ${value}`);
                     const keyValueDiv = document.createElement('div');
+                    keyValueDiv.style.display = 'flex';
+                    keyValueDiv.style.justifyContent = 'space-between';
                     const chg = value[0];
                     const color = value[1];
                     const keyElement = document.createElement('span');
-                    const valueElement = document.createElement('span');
-                    valueElement.style.color = color;
-                    keyElement.innerText = `${key}: `;
-                    valueElement.innerText = chg;
-                    keyValueDiv.innerText = `${key}: ${chg}`;
-                    dynamicDataContainer.appendChild(keyElement);
-                    dynamicDataContainer.appendChild(valueElement);
-                    dynamicDataContainer.appendChild(document.createElement('br'));
+                    // const valueElement = document.createElement('span');
+                    const spaceElement = " ";
+                    const numberElement = document.createElement('span');
+                    numberElement.innerText = data[key][1];
+                    // valueElement.style.color = color;
+                    keyElement.innerText = `${key}`;
+                    keyElement.style.fontWeight = `600`;
+                    keyElement.style.fontFamily = `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`;
+                    numberElement.style.fontWeight = `600`;
+                    // valueElement.innerText = ` ( ${chg} )`;
+                    keyValueDiv.appendChild(keyElement);
+                    keyValueDiv.appendChild(numberElement);
+                    keyValueDiv.style.backgroundColor = color;
+                    keyValueDiv.style.borderRadius = `5px`;
+                    keyValueDiv.style.padding = `5px`;
+                    keyValueDiv.style.margin = `1px`;
+                    keyValueDiv.style.color = `white`;
+                    keyValueDiv.style.opacity = `0.8`;
+                    containerDiv.appendChild(keyValueDiv);
                 }
-              }
+            }
+            const dynamicDataContainer = document.getElementById('dynamicDataContainer');
+            dynamicDataContainer.appendChild(containerDiv);
         }
         money_invested();
     </script>
+    
 </body>
 </html>

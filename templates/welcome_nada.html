@@ -4,34 +4,15 @@
     <title>StockMarket</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
 </head>
-<body>
+<body style="background-image: url(/static/welcome_nada.png); background-size: contain; background-image: center;">
     <div class="navbar">
         <h1> StockMarket </h1>
-        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
-        <a href="/stocks_list" class="navbtn btn-about"> Explore</a>
-        <a href="/compare_stock" class="navbtn btn-about"> Compare</a>
+        <a href="/stocks_list" class="navbtn btn-about"> Explore Stocks</a>
+        <a href="/compare_stock" class="navbtn btn-about"> Compare Stocks</a>
         <a href="/profile" class="navbtn btn-about"> Profile </a>
+        <a href="/filter" class="navbtn btn-about"> Filter </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
-    <script>
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-        const navbar = document.querySelector('.navbar');
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            navbar.classList.toggle('dark-mode-navbar');
-            if (body.classList.contains('dark-mode')) {
-                darkModeToggle.innerText = 'Enable Light Mode';
-                darkModeToggle.style.backgroundColor = 'white';
-                darkModeToggle.style.color = 'black';
-            } else {
-                darkModeToggle.innerText = 'Enable Dark Mode';
-                darkModeToggle.style.backgroundColor = 'black';
-                darkModeToggle.style.color = 'white';
-            }
-        });
-    </script>
     <div class="stocks-area">
         <h1 style="font-size: 3em;">
             STOCKS FOR YOU, {{username}}.
@@ -115,29 +96,24 @@
             const arrowIcon = document.getElementById('arrow-icon');
             const arrowPath = document.getElementById('arrow-path');
             const prices = document.getElementById('priceline');
-    
-            // Check the sign of prevValue
+
             if (prevValue > 0) {
-                // Positive change, set arrow icon to up
                 arrowIcon.classList.add('bi-caret-up-fill');
                 arrowIcon.classList.remove('bi-caret-down-fill');
                 arrowIcon.style.fill = "green";
                 prices.style.color = "green";
                 arrowPath.setAttribute('d', 'M7.247 4.86 2.451 10.342C1.885 10.987 2.345 12 3.204 12h9.592a1 1 0 0 1 .753-1.659l-4.796-5.48a1 1 0 0 1-1.506 0z');
             } else if (prevValue < 0) {
-                // Negative change, set arrow icon to down
                 arrowIcon.classList.add('bi-caret-down-fill');
                 arrowIcon.classList.remove('bi-caret-up-fill');
                 arrowIcon.style.fill = "red";
                 prices.style.color = "red";
                 arrowPath.setAttribute('d', 'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z');
             } else {
-                // No change, hide the arrow icon
                 arrowIcon.style.display = 'none';
             }
         });
     </script>
-    <!-- <div id="top_bottom_3"></div> -->
     <script>
         async function top_bottom(){
             const data = await fetch('/top_3');
@@ -151,26 +127,6 @@
             const topLosersContainer1 = document.getElementById("top_losers1");
             const topLosersContainer2 = document.getElementById("top_losers2");
             const topLosersContainer3 = document.getElementById("top_losers3");
-
-            // Loop through the keys of the result dictionary
-            // Object.keys(result).forEach(key => {
-            //     const entry = result[key];
-            //     const companyName = entry[0];
-            //     const percentageChange = entry[1];
-            //     const color = entry[2];
-
-            //     // Create a div element for each company
-            //     const companyDiv = document.createElement("div");
-            //     companyDiv.style.color = color; // Set text color
-            //     companyDiv.textContent = `${companyName}: ${percentageChange}%`;
-
-            //     // Append the div to the appropriate container based on percentage change
-            //     if (percentageChange > 0) {
-            //         topGainersContainer.appendChild(companyDiv);
-            //     } else {
-            //         topLosersContainer.appendChild(companyDiv);
-            //     }
-            // });
 
             const entry1 = result[0];
             const companyName1 = entry1[0];

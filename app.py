@@ -197,7 +197,20 @@ def stock_particular():
         prev=prev,
         svg=svg,
         info=info,
+        user_name=session["username"],
     )
+
+
+@app.route("/get_quantity")
+def stock_quantity():
+    stock = request.args.get("stock")
+    user = session["username"]
+    file_path = f"instance/{user}.json"
+    with open(file_path, "r") as json_file:
+        data = json.load(json_file)
+
+    quantity = data.get(stock)
+    return [quantity]
 
 
 @app.route("/BUY", methods=["POST"])
@@ -209,10 +222,10 @@ def BUY():
     stock = data.get("stock")
     print(data.get("balance"))
     balance = float(data.get("balance"))
-    # print(stock,user,type(price),type(quantity),type(balance),balance)
 
     if balance < quantity * price:
-        return "Not Enough Balance"
+        response_data = {"message": "Not Enough Balance", "stock_quantity": data[stock]}
+        return jsonify(response_data)
     else:
         query = f"UPDATE user SET balance = {balance} - {quantity*price} WHERE username = '{user}' "
         conn = sqlite3.connect(f"instance/users.db")
@@ -224,14 +237,16 @@ def BUY():
         with open(file_path, "r") as json_file:
             data = json.load(json_file)
 
-        # Check if a row with the specified name exists
-
         data[stock] = float(data[stock]) + quantity
 
         # Write the updated data back to the JSON file
         with open(file_path, "w") as json_file:
             json.dump(data, json_file, indent=2)
-        return "Bought Succesfully"
+        response_data = {
+            "message": "BOUGHT SUCCESSFULLY!",
+            "stock_quantity": data[stock],
+        }
+        return jsonify(response_data)
 
 
 @app.route("/SELL", methods=["POST"])
@@ -247,7 +262,11 @@ def SELL():
         data = json.load(json_file)
     bought = data[stock]
     if quantity > bought:
-        return "Not Enough Stocks in Balance"
+        response_data = {
+            "message": "Not Enough Stocks in Balance",
+            "stock_quantity": data[stock],
+        }
+        return jsonify(response_data)
     else:
         query = f"UPDATE user SET balance = {balance} + {quantity*price} WHERE username = '{user}' "
         conn = sqlite3.connect(f"instance/users.db")
@@ -258,7 +277,8 @@ def SELL():
         data[stock] = float(data[stock]) - quantity
         with open(file_path, "w") as json_file:
             json.dump(data, json_file, indent=2)
-        return "Sold Succesfully"
+        response_data = {"message": "SOLD SUCCESSFULLY!", "stock_quantity": data[stock]}
+        return jsonify(response_data)
 
 
 @app.route("/Profit")
@@ -277,7 +297,9 @@ def profit():
     df = pd.read_csv("stock_name.csv")
     for name, symbol in zip(df["Company Name"], df["Symbol"]):
         if data[name] != 0:
-            pr[name] = temp[symbol]
+            pr[name] = []
+            pr[name].append(temp[symbol])
+            pr[name].append(data[name])
     print(pr)
     return jsonify(pr)
 
@@ -309,6 +331,51 @@ def query_database():
     result = cursor.fetchall()
 
     conn.close()
+    return jsonify(result)
+
+
+@app.route("/filter")
+def filter():
+    return render_template("filter.html")
+
+
+@app.route("/default_filter", methods=["POST"])
+def default_filter():
+    data = request.json
+    category = data["category"]
+    month = int(data["month"])
+    lowerbound = float(data["lowerBound"])
+    upperbound = float(data["upperBound"])
+    company_name = pd.read_csv("stock_name.csv")
+    result = {}
+    for name in company_name["Company Name"]:
+        if name == "Nifty_Fifty" or name == "Sensex":
+            continue
+        db_path = f"historical_data/{name}.db"
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        query = f"SELECT AVG({category}) FROM stock_data_table WHERE DATE >= date('now', '-{month} months')"
+        cursor.execute(query)
+        average_value = cursor.fetchone()[0]
+        if average_value >= lowerbound and average_value <= upperbound:
+            result[name] = average_value
+        conn.close()
+    # print(result)
+    return jsonify(result)
+
+
+@app.route("/PE_filter", methods=["POST"])
+def PE_filter():
+    data = request.json
+    month = int(data["month"])
+    lowerbound = float(data["lowerBound"])
+    upperbound = float(data["upperBound"])
+    company_name = pd.read_csv("stock_name.csv")
+    result = {}
+    for row in yester_day_data:
+        if row[1] >= lowerbound and row[1] <= upperbound:
+            result[row[0]] = row[1]
+    # print(result)
     return jsonify(result)
 
 
