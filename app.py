@@ -80,13 +80,14 @@ def register():
         db.session.commit()
         create_bought_database(user_name=username)
         flash("Registration successful! Please login.")
-        return redirect(url_for("index"))
+        return render_template("login.html")
 
     return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    error = None
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -99,7 +100,9 @@ def login():
             return redirect(url_for("dashboard"))
         else:
             flash("Invalid username or password")
-            return redirect(url_for("index"))
+            error = "Invalid username or password!"
+            # return redirect(url_for("index"))
+            return render_template("login.html", error=error)
     else:
         return render_template("login.html")
 

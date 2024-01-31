@@ -4,32 +4,13 @@
     <title>StockMarket</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
 </head>
-<body>
-    <div class="navbar">
-        <h1> StockMarket </h1>
-        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
-        <a href="/about" class="navbtn btn-about">About the Website and Creators</a>
-        <a href="/login" class="navbtn btn-login">Login/Register</a>
+<body style="background-image: url(/static/start.jpg); background-size:cover; background-position-x: center; background-position-y: top; background-repeat: no-repeat; background-color: rgba(255, 255, 255, 0.5);">
+    <div class="navbar" style="background-color: #033c79;">
+        <h1 style="color: white;"> StockMarket </h1>
+        <a href="/about" class="nav1btn btn-about">About the Website and Creators</a>
+        <a href="/login" class="nav1btn btn-login">Login/Register</a>
     </div>
     <script>
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-        const navbar = document.querySelector('.navbar');
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            navbar.classList.toggle('dark-mode-navbar');
-            if (body.classList.contains('dark-mode')) {
-                darkModeToggle.innerText = 'Enable Light Mode';
-                darkModeToggle.style.backgroundColor = 'white';
-                darkModeToggle.style.color = 'black';
-            } else {
-                darkModeToggle.innerText = 'Enable Dark Mode';
-                darkModeToggle.style.backgroundColor = 'black';
-                darkModeToggle.style.color = 'white';
-            }
-        });
-
     window.addEventListener('scroll', handleScroll);
 
     function handleScroll() {
@@ -61,22 +42,21 @@
     }
     </script>
     <div class="start-area">
-        <img src="{{ url_for('static', filename='stock4_pre.png') }}" style="animation: fadeIn 2s ease-in-out; max-width: 600px; max-height: 500px;" alt="img"/>
-        <h1 style="font-size: 4em;margin-bottom: -10px;">
+        <img src="{{ url_for('static', filename='stock4_pre.png') }}" style="max-width: 600px; max-height: 500px;" alt="img"/>
+        <h1 style="font-size: 4em;margin-bottom: -10px; animation: zoomIn 1s ease-in-out; ">
             Stock Market Simulator
         </h1>
-        <h3>
+        <h3 style="animation: fadeIn 1s ease-in-out;">
             Online platform to stimulate stocks and analyse trends
         </h3>
-        <br/>
-        <a href="/login" class="navbtn btn-login">Get Started </a>
+        <a href="/login" class="navbtn btn-login" style="animation: blink 1.25s infinite; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">GET STARTED</a>
         <br/>
         <br/>
     </div>
     <div class="features">
         <img id="imag" src="{{ url_for('static', filename='stonks2.webp') }}" style="border-radius: 10px; max-width: 600px; max-height: 500px;" alt="img"/>
-        <p id="tex" style="padding: 30px; line-height: 30px;">
-            <span style="font-weight: 800; font-size: larger; text-align: end;">Features</span> <br/>
+        <p id="tex" style="padding: 30px; line-height: 30px; color: white;">
+            <span style="font-weight: 800; font-size: larger; text-align: end; color: white;">Features</span> <br/>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
             Integer faucibus eros sed magna fringilla consequat. Morbi vitae neque ut ligula tempor lobortis. 
             Cras sed nibh volutpat dolor porta venenatis vitae nec nisl. Donec mattis molestie nunc id molestie. 
@@ -86,6 +66,9 @@
             vel tristique turpis velit a orci. Curabitur pulvinar nibh in auctor sagittis. Morbi id facilisis dui. 
             Suspendisse ac consequat arcu. Nam et maximus nunc, in auctor eros. Duis pretium eu justo nec ultricies.</p>
     </div>
-
+    <div class="footer" style="background-color: #033c79;">
+        <span></span>
+        <span style="color: white; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
+    </div>
 </body>
 </html>

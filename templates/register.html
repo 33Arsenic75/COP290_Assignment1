@@ -4,21 +4,33 @@
     <title>Register</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body style="background-image: url(/static/start.jpg); background-size:cover; background-position-x: center; background-position-y: top; background-repeat: no-repeat; background-color: rgba(255, 255, 255, 0.5);">
+    <div style="margin: 20px;">
+        <img src="{{ url_for('static', filename='polles.gif') }}" style="width: 350px; height: 350px;" alt="img"/>
+        <div style="text-align: end; color: white; padding-top: -55px;">
+            <h2>
+                <span class="typewriter-text1" style="animation: compress 2s steps(40, end) 0s forwards;">Start your Stock Market <br/>Journey with us, Today!</span><br>
+                <span class="typewriter-text1" style="animation: compress 2s steps(40, end) 1.5s forwards; opacity: 0; font-size: small;">Created by Jahnabi and Abhinav.</span><br/>
+            </h2>
+        </div>
+    </div>
     <div class="form-container">
-        <h2>Register</h2>
+        <h2>REGISTER</h2>
         <form action="/register" method="post">
             <div class="form-group">
-                <input type="text" name="username" placeholder="Username" required>
+                <input style="padding: 13px;" type="text" name="username" placeholder="Username" required>
             </div>
             <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
+                <input style="padding: 13px;" type="password" name="password" placeholder="Password" required>
             </div>
             <div class="form-group">
-                <button type="submit">Register</button>
+                <button style="padding: 13px; color: white; background-color: rgb(4, 36, 100); border-radius: 5px;"type="submit">Register</button>
             </div>
         </form>
-        <p>Already have an account? <a href="/">Login here</a></p>
+        <p> Already have an account? <a href="/login" style="text-decoration: none; background-color: rgb(27, 39, 70); padding: 7px;  color: white; border-radius: 5px; margin-left: 17px;">Login here</a></p>
+        <br/>
+        <br/>
+        <a href="/" style="text-decoration: none; background-color: rgb(189, 74, 234); padding: 7px;  padding-left:75px; padding-right:75px; color: white; border-radius: 5px;">Back to Home Page</a>
     </div>
 </body>
 </html>
