@@ -8,7 +8,9 @@
     <div class="navbar">
         <h1> StockMarket </h1>
         <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
-        <a href="/stocks_list" class="navbtn btn-about"> Explore Stocks </a>
+        <a href="/stocks_list" class="navbtn btn-about"> Explore</a>
+        <a href="/compare_stock" class="navbtn btn-about"> Compare</a>
+        <a href="/profile" class="navbtn btn-about"> Profile </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
     <script>
@@ -43,7 +45,40 @@
             <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
             </svg> {{prev}} ({{percentage_change}}%)</p>
         </a>
-        <h3 style="font-size: 2em;">TOP GAINERS</h3>      
+        <h3 style="font-size: 2em;">TOP GAINERS</h3>
+        <div style="display: flex; justify-content: space-between; height: 80px;">
+        <div id="top_gainers1" class="navbtn outline-btn" style="text-align: left; display: flex; justify-content: space-between;">
+            <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;"></p>
+            <span style="font-size: 1.0rem; padding-top: 18px;"></span>
+        </div>
+        <div id="top_gainers2" class="navbtn outline-btn" style="text-align: left; font-size: large;  display: flex; justify-content: space-between;">
+            <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;"></p>
+            <span style="font-size: 1.0rem; padding-top: 18px;"></span>
+        </div>
+        <div id="top_gainers3" class="navbtn outline-btn" style="text-align: left; font-size: large;  display: flex; justify-content: space-between;">
+            <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;"></p>
+            <span style="font-size: 1.0rem; padding-top: 18px;"></span>
+        </div>
+        </div>
+        <br/>
+        <br/>
+        <h3 style="font-size: 2em;">TOP LOSERS</h3>
+        <div style="display: flex; justify-content: space-between; height: 80px;">
+            <div id="top_losers1" class="navbtn outline-btn" style="text-align: left;  display: flex; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;"></p>
+                <span style="font-size: 1.0rem; padding-top: 18px;"></span>
+            </div>
+            <div id="top_losers2" class="navbtn outline-btn" style="text-align: left; font-size: large;  display: flex; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;"></p>
+                <span style="font-size: 1.0rem; padding-top: 18px;"></span>
+            </div>
+            <div id="top_losers3" class="navbtn outline-btn" style="text-align: left; font-size: large;  display: flex; justify-content: space-between;">
+                <p style="font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana;"></p>
+                <span style="font-size: 1.0rem; padding-top: 18px;"></span>
+            </div>
+        </div>
+        <br/>
+        <br/>
     </div>
     <script>
         function updateRemainingTime() {
@@ -101,6 +136,151 @@
                 arrowIcon.style.display = 'none';
             }
         });
+    </script>
+    <!-- <div id="top_bottom_3"></div> -->
+    <script>
+        async function top_bottom(){
+            const data = await fetch('/top_3');
+            console.log(data);
+            const result = await data.json();
+            console.log(result);
+            
+            const topGainersContainer1 = document.getElementById("top_gainers1");
+            const topGainersContainer2 = document.getElementById("top_gainers2");
+            const topGainersContainer3 = document.getElementById("top_gainers3");
+            const topLosersContainer1 = document.getElementById("top_losers1");
+            const topLosersContainer2 = document.getElementById("top_losers2");
+            const topLosersContainer3 = document.getElementById("top_losers3");
+
+            // Loop through the keys of the result dictionary
+            // Object.keys(result).forEach(key => {
+            //     const entry = result[key];
+            //     const companyName = entry[0];
+            //     const percentageChange = entry[1];
+            //     const color = entry[2];
+
+            //     // Create a div element for each company
+            //     const companyDiv = document.createElement("div");
+            //     companyDiv.style.color = color; // Set text color
+            //     companyDiv.textContent = `${companyName}: ${percentageChange}%`;
+
+            //     // Append the div to the appropriate container based on percentage change
+            //     if (percentageChange > 0) {
+            //         topGainersContainer.appendChild(companyDiv);
+            //     } else {
+            //         topLosersContainer.appendChild(companyDiv);
+            //     }
+            // });
+
+            const entry1 = result[0];
+            const companyName1 = entry1[0];
+            const percentageChange1 = entry1[1];
+            const color1 = entry1[2];
+
+            const firstPTag = topGainersContainer1.querySelector('p:first-of-type');
+            const secondPTag = topGainersContainer1.querySelector('span');
+
+            var color = percentageChange1 > 0 ? 'green' : 'red';
+            var triangleSpan = document.createElement('span');
+            triangleSpan.innerHTML = percentageChange1 > 0 ? '&nbsp;&#9650;' : '&nbsp;&#9660;';
+            triangleSpan.style.color = color;
+
+            firstPTag.textContent = companyName1;
+            secondPTag.innerHTML = `${percentageChange1}%`;
+            secondPTag.style.color = color1;
+            secondPTag.appendChild(triangleSpan);
+
+            const entry2 = result[1];
+            const companyName2 = entry2[0];
+            const percentageChange2 = entry2[1];
+            const color2 = entry2[2];
+
+            const firstPTag2 = topGainersContainer2.querySelector('p:first-of-type');
+            const secondPTag2 = topGainersContainer2.querySelector('span');
+
+            var color = percentageChange2 > 0 ? 'green' : 'red';
+            var triangleSpan = document.createElement('span');
+            triangleSpan.innerHTML = percentageChange2 > 0 ? '&nbsp;&#9650;' : '&nbsp;&#9660;';
+            triangleSpan.style.color = color;
+
+            firstPTag2.textContent = companyName2;
+            secondPTag2.innerHTML = `${percentageChange2}%`;
+            secondPTag2.style.color = color2;
+            secondPTag2.appendChild(triangleSpan);
+
+            const entry3 = result[2];
+            const companyName3 = entry3[0];
+            const percentageChange3 = entry3[1];
+            const color3 = entry3[2];
+
+            const firstPTag3 = topGainersContainer3.querySelector('p:first-of-type');
+            const secondPTag3 = topGainersContainer3.querySelector('span');
+
+            var color = percentageChange3 > 0 ? 'green' : 'red';
+            var triangleSpan = document.createElement('span');
+            triangleSpan.innerHTML = percentageChange3 > 0 ? '&nbsp;&#9650;' : '&nbsp;&#9660;';
+            triangleSpan.style.color = color;
+
+            firstPTag3.textContent = companyName3;
+            secondPTag3.innerHTML = `${percentageChange3}%`;
+            secondPTag3.style.color = color3;
+            secondPTag3.appendChild(triangleSpan);
+
+            const entry4 = result[5];
+            const companyName4 = entry4[0];
+            const percentageChange4 = entry4[1];
+            const color4 = entry4[2];
+
+            const firstPTag4 = topLosersContainer1.querySelector('p:first-of-type');
+            const secondPTag4 = topLosersContainer1.querySelector('span');
+
+            var color = percentageChange4 > 0 ? 'green' : 'red';
+            var triangleSpan = document.createElement('span');
+            triangleSpan.innerHTML = percentageChange4 > 0 ? '&nbsp;&#9650;' : '&nbsp;&#9660;';
+            triangleSpan.style.color = color;
+
+            firstPTag4.textContent = companyName4;
+            secondPTag4.innerHTML = `${percentageChange4}%`;
+            secondPTag4.style.color = color4;
+            secondPTag4.appendChild(triangleSpan);
+
+            const entry5 = result[4];
+            const companyName5 = entry5[0];
+            const percentageChange5 = entry5[1];
+            const color5 = entry5[2];
+
+            const firstPTag5 = topLosersContainer2.querySelector('p:first-of-type');
+            const secondPTag5 = topLosersContainer2.querySelector('span');
+
+            var color = percentageChange5 > 0 ? 'green' : 'red';
+            var triangleSpan = document.createElement('span');
+            triangleSpan.innerHTML = percentageChange5 > 0 ? '&nbsp;&#9650;' : '&nbsp;&#9660;';
+            triangleSpan.style.color = color;
+
+            firstPTag5.textContent = companyName5;
+            secondPTag5.innerHTML = `${percentageChange5}%`;
+            secondPTag5.style.color = color5;
+            secondPTag5.appendChild(triangleSpan);
+
+            const entry6 = result[3];
+            const companyName6 = entry6[0];
+            const percentageChange6 = entry6[1];
+            const color6 = entry6[2];
+
+            const firstPTag6 = topLosersContainer3.querySelector('p:first-of-type');
+            const secondPTag6 = topLosersContainer3.querySelector('span');
+
+            var color = percentageChange6 > 0 ? 'green' : 'red';
+            var triangleSpan = document.createElement('span');
+            triangleSpan.innerHTML = percentageChange6 > 0 ? '&nbsp;&#9650;' : '&nbsp;&#9660;';
+            triangleSpan.style.color = color;
+
+            firstPTag6.textContent = companyName6;
+            secondPTag6.innerHTML = `${percentageChange6}%`;
+            secondPTag6.style.color = color6;
+            secondPTag6.appendChild(triangleSpan);
+        }
+        top_bottom();
     </script>
 </body>
 </html>

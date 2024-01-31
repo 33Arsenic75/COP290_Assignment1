@@ -59,7 +59,7 @@ button, .navbtn {
 }
 
 .navbtn + .navbtn {
-    margin-left: -620px;/
+    margin-left: -450px;
 }
 
 .dark-mode {
@@ -147,6 +147,7 @@ button, .navbtn {
     background-color: transparent;
     border: 2px solid #444;
     color: #444;
+    width: 300px;
 }
 
 .outline-btn:hover {
@@ -182,3 +183,21 @@ button, .navbtn {
     padding: 10px; 
 }
 
+.info {
+    width: 800px;
+    border: 1px solid rgb(241, 241, 241);
+    border-radius: 5px;
+    padding: 10px; 
+}
+
+.profile-container {
+    text-align: center;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 700px;
+    height:300px;
+    margin: auto;
+    margin-top: 80px;
+}

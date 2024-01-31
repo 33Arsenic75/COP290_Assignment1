@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StockMarket - Profile</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1> StockMarket </h1>
+        <button class="navbtn" style="background-color: black; color: white;" id="dark-mode-toggle"> Enable Dark Mode </button>
+        <a href="/stocks_list" class="navbtn btn-about"> Explore</a>
+        <a href="/compare_stock" class="navbtn btn-about"> Compare</a>
+        <a href="/profile" class="navbtn btn-about"> Profile </a>
+        <a href="/" class="navbtn btn-logout">Logout</a>
+    </div>
+
+    <div class="profile-container">
+        <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: rgb(176, 174, 174);">USER PROFILE</h2>
+        <img src="{{ url_for('static', filename='userpng.png') }}" style="max-width: 100px; max-height: 80px;" alt="img"/>
+        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.25em; font-weight: 600;"><span id="username">{{ username }}</span></p>
+        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">BALANCE : ₹ <span id="balance"></span></p>
+        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">Invested in stocks: <span id="invested"></span></p>
+        <div id="dynamicDataContainer"></div>
+        <!-- Add more content related to the user's profile here -->
+    </div>
+
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        const navbar = document.querySelector('.navbar');
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            navbar.classList.toggle('dark-mode-navbar');
+            if (body.classList.contains('dark-mode')) {
+                darkModeToggle.innerText = 'Enable Light Mode';
+                darkModeToggle.style.backgroundColor = 'white';
+                darkModeToggle.style.color = 'black';
+            } else {
+                darkModeToggle.innerText = 'Enable Dark Mode';
+                darkModeToggle.style.backgroundColor = 'black';
+                darkModeToggle.style.color = 'white';
+            }
+        });
+
+        // Accessing the username and balance passed from the server-side
+        const username = "{{ username }}";
+        document.getElementById('username').innerText = username;
+        async function get_balance() {
+            const response = await fetch('/get_balance');
+            const data = await response.json();
+            if (data) {
+                const balance = data[0];
+                document.getElementById('balance').innerText = balance;
+            } else {
+                document.getElementById('balance').innerText = "Unable to Access data base, Try again later";
+            }
+        }
+        get_balance();
+    </script>
+    </script>
+    <script>
+        async function money_invested(){
+            console.log("HI");
+            const response = await fetch('/Profit');
+            const data = await response.json();
+            console.log(data);
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const value = data[key];
+                    console.log(`${key}: ${value}`);
+                    const keyValueDiv = document.createElement('div');
+                    const chg = value[0];
+                    const color = value[1];
+                    const keyElement = document.createElement('span');
+                    const valueElement = document.createElement('span');
+                    valueElement.style.color = color;
+                    keyElement.innerText = `${key}: `;
+                    valueElement.innerText = chg;
+                    keyValueDiv.innerText = `${key}: ${chg}`;
+                    dynamicDataContainer.appendChild(keyElement);
+                    dynamicDataContainer.appendChild(valueElement);
+                    dynamicDataContainer.appendChild(document.createElement('br'));
+                }
+              }
+        }
+        money_invested();
+    </script>
+</body>
+</html>

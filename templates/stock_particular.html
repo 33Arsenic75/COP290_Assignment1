@@ -36,6 +36,7 @@
         <br/>
         <div style="font-size: 2em; font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"> {{stock_name}}</div>
         <hr style="opacity: 0.25;"/>
+        <p style="font-size: 0.5em; color: grey; padding-top: 10px; padding-bottom: 10px;">Current price graph adapted from Google Finance</p>
         <div>
             <span style="font-size: 2.75em;">₹ {{price}}</span>
             <div id="entire" style="background-color: rgb(224, 240, 219); display: inline-block; padding: 10px; border-radius: 5px; margin-left: 20px; margin-bottom: 10px;">
@@ -45,6 +46,8 @@
             </div>
             <span id="price-change" style="display: inline-block; padding: 10px; border-radius: 5px; background-color:red; font-size: 1.25em; color: white;"> {{change}} Today</span>
         </div>
+        <div style="display: flex; justify-content: space-between; padding: 20px;">
+        <div>{{svg | safe}}</div>
         <div class="information">
             <p style="display: flex; justify-content: space-between;">
                 <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">PREVIOUS CLOSING</span>
@@ -55,6 +58,12 @@
                 <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">P/E RATIO</span>
                 <span>{{pe_ratio}}</span>
             </p>
+            <input type="text" id="user_input" name="user_input" placeholder="No. of Stocks" style="padding: 10px; margin: 20px; margin-bottom: 10px; width:230px; text-align: center;">
+            <div style="padding: 10px; margin-left: 10px; margin-right:10px; text-align: center;">
+                <button onclick="BUY()" style="color:white; background-color: green;">BUY</button>
+                <button onclick="SELL()" style="color:white; background-color: red;">SELL</button>
+            </div>
+        </div>
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -90,15 +99,106 @@
                 }
             });
         </script>
-        <!-- <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" required>
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" required>
-        <button onclick='fetchData()'>Fetch Data</button>
-        <div style="width: 600px; height: 450px;">
+        <br/>
+        <br/>
+        <div style="padding-left: 250px;">
+            <!-- <button style="text-align: center;"> CURRENT </button> -->
+            <button style="text-align: center; color: white; background-color: rgb(0, 0, 0);" onclick="toggleHistoricalData()"> GET HISTORICAL DATA </button>
+        </div>
+        <br/>
+        <div id="historical" style="display: none; padding-top: 20px; padding-left: 20px; padding-right: 20px; padding-bottom: 1px;">
+        <label for="startDate" style="margin: 5px; font-weight: 600; font-size: 1.25em;">START DATE:</label>
+        <input  style="margin: 5px; padding: 10px;" type="date" id="startDate" required>
+        <label for="endDate"  style="margin: 5px; font-weight: 600; font-size: 1.25em;">END DATE:</label>
+        <input  style="margin: 5px; padding: 10px;" type="date" id="endDate" required>
+        <button  style="margin: 5px;" onclick='fetchData()'>Fetch Data</button>
+        <div style="width: 800px; height: 550px;">
             <canvas id="chartContainer"></canvas>
         </div>
     </div>
+    <div class="info">
+        <span style="font-size: 1.25em; font-weight: 600;">ABOUT <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+        </svg></span>
+        <br/>
+        <br/>
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{info}}</div>
+        <br/>
+    </div>
+    </div>
+    <div>Balance: <span id="balance"></span></div>
+    <script>
+        function toggleHistoricalData() {
+            var historicalElement = document.getElementById("historical");
+            if (historicalElement.style.display === "none") {
+                historicalElement.style.display = "block";
+            } else {
+                historicalElement.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        const username = "{{ username }}";
+        update_balance();
+        async function update_balance() {
+            const response = await fetch('/get_balance');
+            const data = await response.json();
+            if (data) {
+                const balance = data[0];
+                document.getElementById('balance').innerText = balance;
+            } else {
+                document.getElementById('balance').innerText = "Unable to Access data base, Try again later";
+            }
+        }
+    </script>
+    <script>
+        async function BUY(){
+            update_balance();
+            const quantity = document.getElementById("user_input").value;
+            const price = "{{price}}";
+            console.log(quantity,price);
+            const stock = "{{stock_name}}";
+            const user = "{{user_name}}";
+            const balance = document.getElementById("balance").innerText;
+            console.log(balance);
+            console.log(user);
+            const response = await fetch(`/BUY?quantity=${quantity}&price=${price}&stock=${stock}&user=${user}&balance=${balance}`,{
+                method: 'POST',  // Use the POST method
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity,price, stock, user, balance })
+            });
+
+            const Status = await response.text();
+            console.log(Status);
+            update_balance();
+        }
+    </script>
+    <script>
+        async function SELL(){
+            update_balance();
+            const quantity = document.getElementById("user_input").value;
+            const price = "{{price}}";
+            console.log(quantity,price);
+            const stock = "{{stock_name}}";
+            const user = "{{user_name}}";
+            const balance = document.getElementById("balance").innerText;
+            console.log(balance);
+            console.log(user);
+            const response = await fetch(`/SELL?quantity=${quantity}&price=${price}&stock=${stock}&user=${user}&balance=${balance}`,{
+                method: 'POST',  // Use the POST method
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity,price, stock, user, balance })
+            });
+
+            const Status = await response.text();
+            console.log(Status);
+            update_balance();
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
@@ -123,14 +223,17 @@
         
                 const data = await response.json();
         
-                console.log(data);
+                ///console.log(data);
         
-                const dates = data.map(entry => entry.date); 
-                const values = data.map(entry => entry.CLOSE);
-        
-                console.log('Dates:', dates);
-                console.log('Values:', values);
-        
+                let dates  =[];
+                let prices =[];
+                console.log(data)
+                for (let entry of data) {
+                    dates.push(entry[0]);
+                    prices.push(entry[1]);
+                }
+                console.log(dates)
+                console.log(prices)
                 const ctx = document.getElementById('chartContainer').getContext('2d');
                 const existingChart = Chart.getChart(ctx);
                 if (existingChart) {
@@ -141,8 +244,8 @@
                     data: {
                         labels: dates,
                         datasets: [{
-                            label: 'Values',
-                            data: values,
+                            label: 'Prices',
+                            data: prices,
                             borderColor: 'rgb(75, 192, 192)',
                             borderWidth: 2,
                             fill: false,
@@ -156,6 +259,9 @@
                                 type: 'time',
                                 time: {
                                     unit: 'day',
+                                    displayFormat:{
+                                        day: 'MMM D, YYYY'
+                                    }
                                 },
                             },
                             y: {
@@ -169,6 +275,6 @@
             }
         }
  
-    </script> -->
+    </script>
 </body>
 </html>
