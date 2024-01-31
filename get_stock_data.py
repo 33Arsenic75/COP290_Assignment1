@@ -21,7 +21,7 @@ def get_stock_data(symbol, years):
             series="EQ"
         )
     except Exception as e:
-        print(f"An error occurred while fetching stock info: {e}")
+        # print(f"An error occurred while fetching stock info: {e}")
         stock_info = None  # or any default value or action you want
     # Extracting required columns
     # Convert the data dictionary to a Pandas DataFrame
@@ -36,10 +36,10 @@ def get_stock_data(symbol, years):
         if column in df.columns:
             df = df.drop(columns=column)
     # print(df.columns)
-    print(symbol)
+    # print(len(df))
     return df
 
 if __name__=='__main__':
-    df=pd.read_csv('ind_nifty50list.csv')
+    df=pd.read_csv('stock_name.csv')
     for symbol in df['Symbol']:
         get_stock_data(symbol=symbol,years=1)

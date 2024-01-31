@@ -13,6 +13,7 @@ def intra_day_data(ISIN_CODE,symbol):
     headers = {
         'Accept': 'application/json'
     }
+    print(url)
 
     response = requests.get(url, headers=headers)
     print(ISIN_CODE)
@@ -26,6 +27,9 @@ def intra_day_data(ISIN_CODE,symbol):
             data['Time'].append(datetime.fromisoformat(i[0]).strftime("%H:%M"))
             data['Price'].append(i[1])
         data=pd.DataFrame(data)
+        if(len(data)==0):
+            print(ISIN_CODE + " data not found")
+            return
         timestamps = data['Time']
         closing_prices = data['Price']
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -62,8 +66,10 @@ def intra_day_data(ISIN_CODE,symbol):
 
 if __name__ == '__main__':
     # Read the CSV file into a DataFrame
-    data = pd.read_csv('ind_nifty50list.csv')
+    data = pd.read_csv('stock_name.csv')
     # intra_day_data(ISIN_CODE='INE423A01024', symbol='ADANIENT')
     # Iterate through the 'ISIN Code' and 'Symbol' columns simultaneously
-    for code, symbol in zip(data['ISIN Code'], data['Symbol']):
+    for code, symbol,exchange in zip(data['ISIN Code'], data['Symbol'],data['Exchange']):
+        if(exchange)!='NSE':
+            continue
         intra_day_data(ISIN_CODE=code, symbol=symbol)

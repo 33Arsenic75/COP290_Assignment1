@@ -25,21 +25,28 @@ def process_stock_data(row):
     symbol = row['Symbol']
     company_name = row['Company Name']
     
-    df = get_stock_data(symbol=symbol, years=10)
+    df = get_stock_data(symbol=symbol, years=20)
+    print(len(df))
     generate_db(df, symbol, company_name)
 
 if __name__ == '__main__':
-    with open('ind_nifty50list.csv', 'r') as file:
-        csv_reader = csv.DictReader(file)
+    import random
 
-        # Using ThreadPoolExecutor for parallel processing
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            # Submit tasks for each row in the CSV file
-            futures = [executor.submit(process_stock_data, row) for row in csv_reader]
+    random_number = random.randint(1, 50)
 
-            # Wait for all tasks to complete
-            concurrent.futures.wait(futures)
+    print(random_number)
+
+    # with open('ind_nifty50list.csv', 'r') as file:
+    #     csv_reader = csv.DictReader(file)
+
+    #     # Using ThreadPoolExecutor for parallel processing
+    #     with concurrent.futures.ThreadPoolExecutor() as executor:
+    #         # Submit tasks for each row in the CSV file
+    #         futures = [executor.submit(process_stock_data, row) for row in csv_reader]
+
+    #         # Wait for all tasks to complete
+    #         concurrent.futures.wait(futures)
             
-            # Optional: You can collect results or handle exceptions if needed
-            # results = [future.result() for future in futures]
-            # handle_results(results)
+    #         # Optional: You can collect results or handle exceptions if needed
+    #         # results = [future.result() for future in futures]
+    #         # handle_results(results)
