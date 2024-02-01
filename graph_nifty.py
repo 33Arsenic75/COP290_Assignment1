@@ -4,13 +4,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
 
 
 def main(ticker, exchange):
     url = f"https://www.google.com/finance/quote/{ticker}:{exchange}"
     # Set ChromeOptions for configuring the behavior of the Chrome browser
     options = webdriver.ChromeOptions()
-
     # Set the browser to run in headless mode
     options.add_argument("--headless")
 
@@ -47,9 +47,18 @@ def main(ticker, exchange):
 
     # Get the outer HTML content of the located SVG element
     svg_outer_html = svg_element.get_attribute("outerHTML")
+    soup = BeautifulSoup(svg_outer_html, "html.parser")
+
+    # Find all path elements with mask attribute and remove the attribute
+    path_elements = soup.find_all("g", {"mask": True})
+    for path_element in path_elements:
+        del path_element["mask"]
+
+    # Get the modified SVG content
+    final = str(soup)
 
     # Quit the WebDriver and close the browser window
     driver.quit()
 
     # Return the outer HTML content of the SVG element
-    return svg_outer_html
+    return final
