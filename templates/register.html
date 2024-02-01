@@ -16,6 +16,9 @@
     </div>
     <div class="form-container">
         <h2>REGISTER</h2>
+        {% if error %}
+            <div style="font-size: smaller; color: white; background-color: rgb(165, 9, 9); padding: 6px; margin-bottom: 8px; width: 280px; border-radius: 5px;">{{ error }}</div>
+        {% endif %}
         <form action="/register" method="post">
             <div class="form-group">
                 <input style="padding: 13px;" type="text" name="username" placeholder="Username" required>
