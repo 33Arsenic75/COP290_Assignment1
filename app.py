@@ -43,18 +43,24 @@ with app.app_context():
     db.create_all()
 
 
+
+@app.route("/filter")
+def filter():
+    return render_template("filter.html")
+
+
 @app.route("/")
 def index():
     return render_template("index_nada.html")
 
-
+dic={}
 @app.route("/update_data")
 def update_data():
     # Fetch new data and update the dynamic_data dictionary
     dic = fetch_real_time()
     return dic
 
-
+    
 def create_bought_database(user_name):
     # Adjust the path and base filename as needed
     source_path = "instance/temp.json"
@@ -80,7 +86,7 @@ def register():
         db.session.commit()
         create_bought_database(user_name=username)
         flash("Registration successful! Please login.")
-        return render_template("login.html")
+        return redirect(url_for("index"))
 
     return render_template("register.html")
 
@@ -106,7 +112,7 @@ def login():
     else:
         return render_template("login.html")
 
-
+    
 @app.route("/dashboard")
 def dashboard():
     if "user_id" in session:
@@ -145,26 +151,29 @@ def get_balance():
         cursor.execute(query)
         result = cursor.fetchall()
         conn.close()
-        result = result[0][0]
+        result = round(result[0][0],3)
         return [result]
     else:
         return None
 
-
+gb_imp_do_not_change=0
 @app.route("/stock")
 def stock():
     if "user_id" in session:
         company_name, price, change, percentage_change, pe_ratio = real_time_price(
             "NIFTY_50", "INDEXNSE"
         )
+        gb_imp_do_not_change=percentage_change
         svg = main("NIFTY_50", "INDEXNSE")
         return render_template(
             "stock.html",
             username=session["username"],
             price=price,
-            prev=change,
+            change=change,
+            prev=round(price-change,3),
             percentage_change=percentage_change,
             svg=svg,
+            pe_ratio=pe_ratio,
             user_name=session["username"],
         )
     else:
@@ -203,19 +212,45 @@ def stock_particular():
         user_name=session["username"],
     )
 
+@app.route('/default_filter',methods=['POST'])
+def default_filter():
+    data = request.json
+    category = data["category"]
+    month = int(data["month"])
+    lowerbound =float(data["lowerBound"])
+    upperbound =float(data["upperBound"])
+    company_name = pd.read_csv('stock_name.csv')
+    result ={}
+    for name in company_name["Company Name"]:
+        if(name=="Nifty_Fifty" or name =="Sensex"):
+            continue
+        db_path = f"historical_data/{name}.db"
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        query = f"SELECT AVG({category}) FROM stock_data_table WHERE DATE >= date('now', '-{month} months')"
+        cursor.execute(query)
+        average_value = cursor.fetchone()[0]
+        if ( average_value >= lowerbound and average_value<=upperbound ):
+            result[name]=average_value
+        conn.close()
+    # print(result)
+    return jsonify(result)
 
-@app.route("/get_quantity")
-def stock_quantity():
-    stock = request.args.get("stock")
-    user = session["username"]
-    file_path = f"instance/{user}.json"
-    with open(file_path, "r") as json_file:
-        data = json.load(json_file)
-
-    quantity = data.get(stock)
-    return [quantity]
-
-
+@app.route('/PE_filter',methods=['POST'])
+def PE_filter():
+    data = request.json
+    month = int(data["month"])
+    lowerbound =float(data["lowerBound"])
+    upperbound =float(data["upperBound"])
+    company_name = pd.read_csv('stock_name.csv')
+    result ={}
+    for row in yester_day_data:
+        if(row[1]>=lowerbound and row[1]<=upperbound):
+            result[row[0]]=row[1]
+    # print(result)
+    return jsonify(result)
+    
+    
 @app.route("/BUY", methods=["POST"])
 def BUY():
     data = request.json
@@ -225,9 +260,10 @@ def BUY():
     stock = data.get("stock")
     print(data.get("balance"))
     balance = float(data.get("balance"))
-
+    # print(stock,user,type(price),type(quantity),type(balance),balance)
+    print(user)
     if balance < quantity * price:
-        response_data = {"message": "Not Enough Balance", "stock_quantity": data[stock]}
+        response_data = {"message": "Not Enough Balance"}
         return jsonify(response_data)
     else:
         query = f"UPDATE user SET balance = {balance} - {quantity*price} WHERE username = '{user}' "
@@ -237,8 +273,10 @@ def BUY():
         conn.commit()
         conn.close()
         file_path = f"instance/{user}.json"
-        with open(file_path, "r") as json_file:
+        with open(file_path, 'r') as json_file:
             data = json.load(json_file)
+
+        # Check if a row with the specified name exists
 
         data[stock] = float(data[stock]) + quantity
 
@@ -261,7 +299,7 @@ def SELL():
     stock = data.get("stock")
     balance = float(data.get("balance"))
     file_path = f"instance/{user}.json"
-    with open(file_path, "r") as json_file:
+    with open(file_path, 'r') as json_file:
         data = json.load(json_file)
     bought = data[stock]
     if quantity > bought:
@@ -296,16 +334,33 @@ def profit():
     temp = {}
     for row in yester_day_data:
         temp[row[0]] = [row[1], row[2]]
-
     df = pd.read_csv("stock_name.csv")
     for name, symbol in zip(df["Company Name"], df["Symbol"]):
-        if data[name] != 0:
+        if name == "Nifty_Fifty" and data[name]!=0:
             pr[name] = []
+            color = 'green' if gb_imp_do_not_change > 0 else 'red'
+            pr[name].append([gb_imp_do_not_change,color])
+            pr[name].append(data[name])
+        elif data[name] != 0:
+            # print(name)
+            pr[name] = []
+            # print(temp[symbol])
+            # print(data[name])
             pr[name].append(temp[symbol])
             pr[name].append(data[name])
     print(pr)
     return jsonify(pr)
 
+@app.route("/get_quantity")
+def stock_quantity():
+    stock = request.args.get("stock")
+    user = session["username"]
+    file_path = f"instance/{user}.json"
+    with open(file_path, "r") as json_file:
+        data = json.load(json_file)
+
+    quantity = data.get(stock)
+    return [quantity]
 
 @app.route("/compare_stock")
 def compare_stock():
@@ -334,51 +389,6 @@ def query_database():
     result = cursor.fetchall()
 
     conn.close()
-    return jsonify(result)
-
-
-@app.route("/filter")
-def filter():
-    return render_template("filter.html")
-
-
-@app.route("/default_filter", methods=["POST"])
-def default_filter():
-    data = request.json
-    category = data["category"]
-    month = int(data["month"])
-    lowerbound = float(data["lowerBound"])
-    upperbound = float(data["upperBound"])
-    company_name = pd.read_csv("stock_name.csv")
-    result = {}
-    for name in company_name["Company Name"]:
-        if name == "Nifty_Fifty" or name == "Sensex":
-            continue
-        db_path = f"historical_data/{name}.db"
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        query = f"SELECT AVG({category}) FROM stock_data_table WHERE DATE >= date('now', '-{month} months')"
-        cursor.execute(query)
-        average_value = cursor.fetchone()[0]
-        if average_value >= lowerbound and average_value <= upperbound:
-            result[name] = average_value
-        conn.close()
-    # print(result)
-    return jsonify(result)
-
-
-@app.route("/PE_filter", methods=["POST"])
-def PE_filter():
-    data = request.json
-    month = int(data["month"])
-    lowerbound = float(data["lowerBound"])
-    upperbound = float(data["upperBound"])
-    company_name = pd.read_csv("stock_name.csv")
-    result = {}
-    for row in yester_day_data:
-        if row[1] >= lowerbound and row[1] <= upperbound:
-            result[row[0]] = row[1]
-    # print(result)
     return jsonify(result)
 
 

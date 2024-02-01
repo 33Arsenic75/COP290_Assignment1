@@ -7,7 +7,6 @@
 <body style="background-image: url(/static/start.jpg); background-size:cover; background-position-x: center; background-position-y: top; background-repeat: no-repeat; background-color: rgba(255, 255, 255, 0.5);">
     <div class="navbar" style="background-color: #033c79;">
         <h1 style="color: white;"> StockMarket </h1>
-        <a href="/about" class="nav1btn btn-about">About the Website and Creators</a>
         <a href="/login" class="nav1btn btn-login">Login/Register</a>
     </div>
     <script>
@@ -55,20 +54,24 @@
     </div>
     <div class="features">
         <img id="imag" src="{{ url_for('static', filename='stonks2.webp') }}" style="border-radius: 10px; max-width: 600px; max-height: 500px;" alt="img"/>
-        <p id="tex" style="padding: 30px; line-height: 30px; color: white;">
-            <span style="font-weight: 800; font-size: larger; text-align: end; color: white;">Features</span> <br/>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-            Integer faucibus eros sed magna fringilla consequat. Morbi vitae neque ut ligula tempor lobortis. 
-            Cras sed nibh volutpat dolor porta venenatis vitae nec nisl. Donec mattis molestie nunc id molestie. 
-            Suspendisse sodales augue id enim mattis ultricies. Vivamus condimentum tellus nec nunc suscipit, 
-            ac tempus velit finibus. Sed malesuada magna orci. Nunc ante risus, gravida et dolor eget, vehicula dictum nibh. 
-            Vestibulum eget pellentesque est, vel lobortis quam. Mauris convallis, elit id facilisis ultricies, odio justo venenatis nibh, 
-            vel tristique turpis velit a orci. Curabitur pulvinar nibh in auctor sagittis. Morbi id facilisis dui. 
-            Suspendisse ac consequat arcu. Nam et maximus nunc, in auctor eros. Duis pretium eu justo nec ultricies.</p>
+        <br/>
+        <ul style="color: white;">
+            <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ABOUT US</h1>
+            <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Welcome to our Stock Analysis Platform! We're here to make stock analysis easy and accessible for everyone.
+            Whether you're a seasoned investor or just starting, our platform provides powerful tools to help you make informed
+            decisions about stocks.</p>
+            <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">KEY FEATURES</h2>
+            <li style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"><strong>REAL TIME STOCK INFORMATION :</strong> Stay updated with the latest stock prices and P/E ratios.</li>
+            <li style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"><strong>USER FRIENDLY INTERFACE :</strong> Our platform is built for ease of use, ensuring a seamless
+                experience.</li>
+            <li style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"><strong>COMPARATIVE ANALYSIS : </strong> Easily compare multiple stocks to aid your decision-making.</li>
+            <li style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"><strong>TECHNICAL FILTERS :</strong> Apply filters based on technical indicators for more tailored results.</li>
+        </ul>
+    
     </div>
     <div class="footer" style="background-color: #033c79;">
         <span></span>
-        <span style="color: white; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
+        <span style="color: white; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace; padding-right: 20px;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
     </div>
 </body>
 </html>

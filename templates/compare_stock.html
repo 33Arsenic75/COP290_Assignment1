@@ -4,17 +4,17 @@
     <title>StockMarket</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_new.css') }}">
 </head>
-<body style="background-image: url(/static/compare.png); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: rgba(255, 255, 255, 0.5);">
-    <div class="navbar">
-        <h1> StockMarket </h1>
+<body style="background-image: url(/static/start.jpg); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: rgba(255, 255, 255, 0.5);">
+    <div class="navbar" style="background-color: #033c79;">
+        <h1 style='color : white;'> StockMarket </h1>
         <a href="/stocks_list" class="navbtn btn-about"> Explore Stocks</a>
-        <a href="/dashboard" class="navbtn btn-about"> Dashboard </a>
-        <a href="/profile" class="navbtn btn-about"> Profile </a>
-        <a href="/filter" class="navbtn btn-about"> Filter </a>
+        <a href="/dashboard" class="navbtn btn-about"> Back to Dashboard </a>
+        <a href="/profile" class="navbtn btn-about"> Your Profile </a>
+        <a href="/filter" class="navbtn btn-about"> Filter Stocks </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
     <div class="stocks-area">
-        <div style="font-size: 3.5em;">COMPARE STOCKS</div>
+        <span class="typewriter-text" style="animation: typing 2s steps(40, end) 0s forwards; font-size: 3.5em; color:white; font-weight: 700;">COMPARE STOCKS</span>
         <hr style="opacity: 0.25;"/>
         <br/>
         <input list="tables" id="selectTable" placeholder="Select stocks">
@@ -71,10 +71,10 @@
         </datalist>
         <br/>
         <br/>
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" required>
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" required>
+        <label for="startDate" style='color: black; font-size: 1.15em; background-color: orange; font-weight: 600; padding: 5px; padding-left: 7px; padding-right: 7px; border-radius: 5px;'>START DATE</label>
+        <input style='padding: 7px; border-radius: 5px;' type="date" id="startDate" required>
+        <label for="endDate" style='margin-left: 40px; color: black; font-size: 1.15em; font-weight: 600;  background-color: orange; padding: 5px; padding-left: 7px; padding-right: 7px; border-radius: 5px;'>END DATE</label>
+        <input style='padding: 7px; border-radius: 5px;' type="date" id="endDate" required>
         <br/>
         <br/>
         <div style="padding-bottom: 20px;">
@@ -87,14 +87,16 @@
     <div style="padding-left: 50px; width: 800px; height: 650px;">
         <canvas id="chartContainer"></canvas>
     </div>
-    <div class="footer">
+    <div class="footer" style="background-color: #033c79;">
         <span></span>
-        <span style="color: black; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
+        <span style="color: white; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace; padding-right: 20px;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+
     <script>
+        /// Adds a particular stock to the graph 
         async function addStock() {
                 var stock = document.getElementById("selectTable").value;
                 var startDate = document.getElementById("startDate").value;
@@ -149,18 +151,32 @@
                                             day: 'MMM D, YYYY'
                                         }
                                     },
+                                    ticks: {
+                                        color: 'white', // Set x-axis ticks color to white
+                                    },
                                 },
                                 y: {
                                     beginAtZero: false,
+                                    ticks: {
+                                        color: 'white', // Set y-axis ticks color to white
+                                    },
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: 'white', // Set legend label text color to white
+                                    },
                                 },
                             },
                         },
                     });
                 } else {
+                    // if chart already exist
                     existingChart.data.datasets.push({
                         label: stock,
                         data: prices,
-                        borderColor: getRandomColor(), // Different color for the new dataset
+                        borderColor: getRandomColor(),
                         borderWidth: 2,
                         fill: false,
                         pointStyle: 'none',
@@ -179,6 +195,9 @@
                     existingChart.data.datasets = [];
                     existingChart.update();
                 }
+                document.getElementById('startDate').value= '';
+                document.getElementById('endDate').value = '';
+
             }
             function getRandomColor() {
                 // Function to generate a random RGB color
@@ -190,6 +209,5 @@
                 return randomColor;
             }
     </script>
-    
 </body>
 </html>

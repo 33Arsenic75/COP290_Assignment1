@@ -13,120 +13,229 @@
         <a href="/filter" class="navbtn btn-about"> Filter </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
-    <script>
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-        const navbar = document.querySelector('.navbar');
+    <style>
+        .stocks-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left : 100px;
+            margin-right : 100px;
+        }
+    
+        .stocks-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+        }
+    
+        .information {
+            max-width: 400px;
+        }
+    
+        .about {
+            margin-top: 20px; /* Add some space between information and about */
+        }
+    </style>
+    
+    <div class="stocks-container">
+        <div class="stocks-content">
+            <div style="margin-left: 40px;">
+                <p style="color: grey; font-size: large;"><span id="remaining-time"></span></p>
+                <img src="{{ url_for('static', filename='NIFTY_logo.webp') }}" style="max-width: 90px; max-height: 60px;" alt="img"/>
+                <h3 style="font-size: 3em;">NIFTY 50</h3>
+                <div>
+                    <span style="color: grey;font-size: 2em;">₹ {{price}}</span>
+                    <div id="entire" style="background-color: rgb(224, 240, 219); display: inline-block; padding: 12px; border-radius: 5px; margin-left: 20px; margin-bottom: 10px;">
+                        <span id="price" style="font-size: 1.5em; color: red;"> 
+                            <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                            </svg> 
+                            {{percentage_change}}%
+                        </span>
+                    </div>
+                    <span id="price-change" style="display: inline-block; padding: 12px; border-radius: 5px; background-color:red; font-size: 1.5em; color: white;"> {{change}} Today</span>
+                </div>
+                <p style="font-size: 0.5em; color: grey;">Current price graph adapted from Google Finance</p>
+                <div>{{svg | safe}}</div>
+            </div>
+    
+            <div class="information" style="margin-top: 200px; margin-right:30px; padding-left: 40px; padding-right: 40px;">
+                <p style="display: flex; justify-content: space-between;">
+                    <span style="font-size:small; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">PREVIOUS CLOSING</span>
+                    <span>₹ {{prev}}</span>
+                </p>
+                <hr style="opacity: 0.12;"/>
+                <p style="display: flex; justify-content: space-between;">
+                    <span style="font-size:small; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">P/E RATIO</span>
+                    <span>{{pe_ratio}}</span>
+                </p>
+                <hr style="opacity: 0.12;"/>
+                <input type="text" id="user_input" name="user_input" placeholder="No. of Stocks" style="padding: 10px; margin: 20px; margin-bottom: 10px; width:230px; text-align: center;">
+                <div style="padding: 10px; margin-left: 10px; margin-right:10px; text-align: center;">
+                    <button onclick="BUY()" style="color:white; background-color: green;">BUY</button>
+                    <button onclick="SELL()" style="color:white; background-color: red;">SELL</button>
+                </div>
+                <hr style="opacity: 0.12;"/>
+                <p style="display: flex; justify-content: space-between;">
+                    <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">BALANCE</span>
+                    <span>₹<span id="balance"></span></span>
+                </p>
+                <p style="display: flex; justify-content: space-between;">
+                    <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">STOCKS</span>
+                    <span id="bought_sold"></span>
+                </p>
+                <p style="display: flex; justify-content: space-between;">
+                    <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><span id="response" style="text-align: center; "></span></span>
+                </p>
+            </div>
+        </div>
 
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            navbar.classList.toggle('dark-mode-navbar');
-            if (body.classList.contains('dark-mode')) {
-                darkModeToggle.innerText = 'Enable Light Mode';
-                darkModeToggle.style.backgroundColor = 'white';
-                darkModeToggle.style.color = 'black';
-            } else {
-                darkModeToggle.innerText = 'Enable Dark Mode';
-                darkModeToggle.style.backgroundColor = 'black';
-                darkModeToggle.style.color = 'white';
-            }
-        });
-    </script>
-    <div class="stocks-area">
-        <h1 style="font-size: 2em;">
-            NIFTY_50
-            <hr style="opacity: 0.25;"/>
-        </h1>
-        <p style="color: grey; font-size: large;"><span id="remaining-time"></p>
-        <h3 style="font-size: 2em;">NIFTY 50</h3>
-        <div> <span style="color: grey;font-size: 1.75em;">₹ {{price}}</span>
-        <div id="entire" style="background-color: rgb(224, 240, 219); display: inline-block; padding: 10px; border-radius: 5px; margin-left: 20px; margin-bottom: 10px;">
-            <span id="price" style="font-size: 1em; color: red;"> <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                </svg> {{percentage_change}}%</span>
-        </div>
-        <span id="price-change" style="display: inline-block; padding: 10px; border-radius: 5px; background-color:red; font-size: 1em; color: white;"> {{prev}} Today</span>
-        </div>
-        <p style="font-size: 0.5em; color: grey;">Current price graph adapted from Google Finance</p>
-        <div>{{svg | safe}}</div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <div>
-            <p data-bs-toggle="tooltip" data-bs-placement="above" title="information" style="font-size: 1.5rem; font-weight: 800;">About <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
-            </svg>
+        <div style="margin-left: 40px;">
+            <p data-bs-toggle="tooltip" data-bs-placement="above" title="information" style="font-size: 2rem; font-weight: 800;">About 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                </svg>
             </p>
-            <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; width: 800px;">The NIFTY 50 is a benchmark Indian stock market index that represents the weighted average of 50 of the largest Indian companies listed on the National Stock Exchange. Nifty 50 is owned and managed by NSE Indices, which is a wholly owned subsidiary of the NSE Strategic Investment Corporation Limited. NSE Indices had a marketing and licensing agreement with Standard & Poor's for co-branding equity indices until 2013. The Nifty 50 index was launched on 22 April 1996, and is one of the many stock indices of Nifty. The NIFTY 50 index has shaped up to be the largest single financial product in India, with an ecosystem consisting of exchange-traded funds, and futures and options at NSE and SGX. NIFTY 50 is the world's most actively traded contract. WFE, IOM and FIA surveys endorse NSE's leadership position. Between 2008 & 2012, the NIFTY 50 index's share of NSE market fell from 65% to 29% due to the rise of sectoral indices like NIFTY Bank, NIFTY IT, NIFTY Pharma, and NIFTY Next 50. The NIFTY 50 index covers 13 sectors of the Indian economy and offers investment managers exposure to the Indian market in one portfolio.</p>
+            <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; width: 800px; font-size: 1.25em;">The NIFTY 50 is a benchmark Indian stock market index that represents the weighted average of 50 of the largest Indian companies listed on the National Stock Exchange. Nifty 50 is owned and managed by NSE Indices, which is a wholly owned subsidiary of the NSE Strategic Investment Corporation Limited. NSE Indices had a marketing and licensing agreement with Standard & Poor's for co-branding equity indices until 2013. The Nifty 50 index was launched on 22 April 1996, and is one of the many stock indices of Nifty. The NIFTY 50 index has shaped up to be the largest single financial product in India, with an ecosystem consisting of exchange-traded funds, and futures and options at NSE and SGX. NIFTY 50 is the world's most actively traded contract. WFE, IOM and FIA surveys endorse NSE's leadership position. Between 2008 & 2012, the NIFTY 50 index's share of NSE market fell from 65% to 29% due to the rise of sectoral indices like NIFTY Bank, NIFTY IT, NIFTY Pharma, and NIFTY Next 50. The NIFTY 50 index covers 13 sectors of the Indian economy and offers investment managers exposure to the Indian market in one portfolio.</p
+    
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const prevValue = parseFloat("{{change}}");
+                const arrowIcon = document.getElementById('arrow-icon');
+                const arrowPath = document.getElementById('arrow-path');
+                const prices = document.getElementById('price');
+                const entire = document.getElementById('entire');
+                const chng = document.getElementById('price-change');
+        
+                // Check the sign of prevValue
+                if (prevValue > 0) {
+                    // Positive change, set arrow icon to up
+                    arrowIcon.classList.add('bi-caret-up-fill');
+                    arrowIcon.classList.remove('bi-caret-down-fill');
+                    arrowIcon.style.fill = "green";
+                    prices.style.color = "green";
+                    chng.style.backgroundColor = "rgb(8, 117, 15)";
+                    entire.style.backgroundColor = "rgb(224, 240, 219)";
+                    arrowPath.setAttribute('d', 'M7.247 4.86 2.451 10.342C1.885 10.987 2.345 12 3.204 12h9.592a1 1 0 0 1 .753-1.659l-4.796-5.48a1 1 0 0 1-1.506 0z');
+                } else if (prevValue < 0) {
+                    // Negative change, set arrow icon to down
+                    arrowIcon.classList.add('bi-caret-down-fill');
+                    arrowIcon.classList.remove('bi-caret-up-fill');
+                    entire.style.backgroundColor = "rgb(242, 233, 233)";
+                    arrowIcon.style.fill = "red";
+                    prices.style.color = "red";
+                    chng.style.backgroundColor = "rgb(178, 8, 8)";
+                    arrowPath.setAttribute('d', 'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z');
+                } else {
+                    // No change, hide the arrow icon
+                    arrowIcon.style.display = 'none';
+                }
+            });
+        </script>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
     </div>
-    <div class="footer">
-        <span></span>
-        <span style="color: black; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
-    </div>
+    <br/>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const prevValue = parseFloat("{{prev}}");
-            const arrowIcon = document.getElementById('arrow-icon');
-            const arrowPath = document.getElementById('arrow-path');
-            const prices = document.getElementById('price');
-            const bck = document.getElementById('entire');
-            const chng = document.getElementById('price-change');
-    
-            // Check the sign of prevValue
-            if (prevValue > 0) {
-                // Positive change, set arrow icon to up
-                arrowIcon.classList.add('bi-caret-up-fill');
-                arrowIcon.classList.remove('bi-caret-down-fill');
-                arrowIcon.style.fill = "green";
-                prices.style.color = "green";
-                chng.style.backgroundColor = "rgb(8, 117, 15)";
-                entire.style.backgroundColor = "rgb(224, 240, 219)";
-                arrowPath.setAttribute('d', 'M7.247 4.86 2.451 10.342C1.885 10.987 2.345 12 3.204 12h9.592a1 1 0 0 1 .753-1.659l-4.796-5.48a1 1 0 0 1-1.506 0z');
-            } else if (prevValue < 0) {
-                // Negative change, set arrow icon to down
-                arrowIcon.classList.add('bi-caret-down-fill');
-                arrowIcon.classList.remove('bi-caret-up-fill');
-                entire.style.backgroundColor = "rgb(242, 233, 233)";
-                arrowIcon.style.fill = "red";
-                prices.style.color = "red";
-                chng.style.backgroundColor = "rgb(178, 8, 8)";
-                arrowPath.setAttribute('d', 'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z');
+        const username = "{{ username }}";
+        update_balance();
+        async function update_balance() {
+            /// reads the balance from the user.db and renders it
+            const response = await fetch('/get_balance');
+            const data = await response.json();
+            if (data) {
+                const balance = data[0];
+                document.getElementById('balance').innerText = balance.toFixed(3);;
             } else {
-                // No change, hide the arrow icon
-                arrowIcon.style.display = 'none';
-            }
-        });
-    </script>
-    <script>
-        function updateRemainingTime() {
-            const remainingTimeElement = document.getElementById('remaining-time');
-            const currentTime = new Date();
-            const targetTime = new Date(currentTime);
-            targetTime.setHours(15, 30, 0, 0); // 3:30 PM
-            const textChange = `MARKET CLOSES AT 3.30 PM`;
-            const textNoChange = `MARKET OPENS AT 9.15 AM`;
-    
-            if (currentTime > targetTime) {
-                targetTime.setDate(targetTime.getDate() + 1);
-            }
-            if (currentTime.getHours() < 9 || (currentTime.getHours() === 9 && currentTime.getMinutes() < 15 || currentTime.getHours() > 15 || currentTime.getHours()===15 && currentTime.getMinutes() > 30)) {
-                remainingTimeElement.textContent = textNoChange;
-            } else {
-                remainingTimeElement.textContent = textChange;
+                document.getElementById('balance').innerText = "Unable to Access data base, Try again later";
             }
         }
-        setInterval(updateRemainingTime, 1000);
-        updateRemainingTime();
     </script>
     <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
+        update_quantity();
+    
+        async function update_quantity() {
+            const stock = "Nifty_Fifty";
+            const response = await fetch(`/get_quantity?stock=${stock}`);
+            const data = await response.json();
+            if (data) {
+                const quantity = data[0];
+                document.getElementById('bought_sold').innerText = quantity;
+            } else {
+                document.getElementById('bought_sold').innerText = "Unable to Access database. Please try again later.";
+            }
+        }
+    </script>
+    <script>
+        async function BUY(){
+            update_balance();
+            update_quantity();
+            const quantity = document.getElementById("user_input").value;
+            const price = "{{price}}";
+            const stock = "Nifty_Fifty";
+            const user = "{{user_name}}";
+            const balance = document.getElementById("balance").innerText;
+            const response = await fetch(`/BUY?quantity=${quantity}&price=${price}&stock=${stock}&user=${user}&balance=${balance}`,{
+                method: 'POST',  // Use the POST method
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity,price, stock, user, balance })
+            });
+
+            const responseData = await response.json(); // Parse the response as JSON
+            console.log(responseData); // Log the response data
+            // Access responseData.message and responseData.stock_quantity here
+
+            document.getElementById('response').innerText = responseData.message;
+            if (responseData.message == "BOUGHT SUCCESSFULLY!") {
+                document.getElementById('response').style.color = "green";
+            }
+            else {
+                document.getElementById('response').style.color = "red";
+            }
+            update_balance();
+            update_quantity();
+        }
+    </script>
+    <script>
+        async function SELL(){
+            update_balance();
+            update_quantity();
+            const quantity = document.getElementById("user_input").value;
+            const price = "{{price}}";
+            console.log(quantity,price);
+            const stock = "Nifty_Fifty";
+            const user = "{{user_name}}";
+            const balance = document.getElementById("balance").innerText;
+            console.log(balance);
+            console.log(user);
+            const response = await fetch(`/SELL?quantity=${quantity}&price=${price}&stock=${stock}&user=${user}&balance=${balance}`,{
+                method: 'POST',  // Use the POST method
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity,price, stock, user, balance })
+            });
+
+            const responseData = await response.json(); // Parse the response as JSON
+            document.getElementById('response').innerText = responseData.message;
+            if (responseData.message == "SOLD SUCCESSFULLY!") {
+                document.getElementById('response').style.color = "green";
+            }
+            else {
+                document.getElementById('response').style.color = "red";
+            }            
+            // document.getElementById('responded').innerText = responseData.message;
+            update_balance();
+            update_quantity();
+        }
     </script>
 </body>
 </html>

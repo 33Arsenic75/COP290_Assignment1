@@ -7,9 +7,10 @@
 <body>
     <div class="navbar">
         <h1> StockMarket </h1>
-        <a href="/compare_stock" class="navbtn btn-about"> Compare</a>
-        <a href="/filter" class="navbtn btn-about"> Filter </a>
+        <a href="/compare_stock" class="navbtn btn-about"> Compare Stocks </a>
+        <a href="/filter" class="navbtn btn-about"> Filter Stocks </a>
         <a href="/profile" class="navbtn btn-about"> Profile </a>
+        <a href="/stocks_list" class="navbtn btn-about"> Explore Stocks</a>
         <a href="/dashboard" class="navbtn btn-about"> Back to Dashboard </a>
         <a href="/" class="navbtn btn-logout">Logout</a>
     </div>
@@ -17,21 +18,21 @@
         <img src="data:image/png;base64,{{ picture }}" width="70px" alt="PNG Image"/>
         <br/>
         <br/>
-        <div style="font-size: 2em; font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"> {{stock_name}}</div>
+        <div style="font-size: 2.5em; font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"> {{stock_name}}</div>
         <hr style="opacity: 0.25;"/>
         <p style="font-size: 0.5em; color: grey; padding-top: 10px; padding-bottom: 10px;">Current price graph adapted from Google Finance</p>
         <div>
-            <span style="font-size: 2.75em;">₹ {{price}}</span>
+            <span style="font-size: 3.5em;">₹ {{price}}</span>
             <div id="entire" style="background-color: rgb(224, 240, 219); display: inline-block; padding: 10px; border-radius: 5px; margin-left: 20px; margin-bottom: 10px;">
-                <span id="price" style="font-size: 1.25em; color: red;"> <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                <span id="price" style="font-size: 1.5em; color: red;"> <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                     <path id='arrow-path' d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                     </svg> {{percentage_change}}%</span>
             </div>
-            <span id="price-change" style="display: inline-block; padding: 10px; border-radius: 5px; background-color:red; font-size: 1.25em; color: white;"> {{change}} Today</span>
+            <span id="price-change" style="display: inline-block; padding: 10px; border-radius: 5px; background-color:red; font-size: 1.5em; color: white;"> {{change}} Today</span>
         </div>
         <div style="display: flex; justify-content: space-between; padding: 20px;">
         <div>{{svg | safe}}</div>
-        <div class="information">
+        <div class="information" style='margin-top: -100px; padding: 30px; padding-left: 50px; padding-right: 50px'>
             <p style="display: flex; justify-content: space-between;">
                 <span style="font-size:smaller; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">PREVIOUS CLOSING</span>
                 <span>₹ {{prev}}</span>
@@ -98,8 +99,7 @@
         <br/>
         <br/>
         <div style="padding-left: 250px;">
-            <!-- <button style="text-align: center;"> CURRENT </button> -->
-            <button style="text-align: center; color: white; background-color: rgb(0, 0, 0);" onclick="toggleHistoricalData()"> GET HISTORICAL DATA </button>
+            <button style="text-align: center; color: white; background-color: rgb(0, 0, 0); padding: 10px; font-size: 1.5em;" onclick="toggleHistoricalData()"> GET HISTORICAL DATA </button>
         </div>
         <br/>
         <div id="historical" style="display: none; padding-top: 20px; padding-left: 20px; padding-right: 20px; padding-bottom: 1px;">
@@ -112,19 +112,25 @@
             <canvas id="chartContainer"></canvas>
         </div>
     </div>
-    <div class="info">
-        <span style="font-size: 1.25em; font-weight: 600;">ABOUT <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+    <br/>
+    <div class="info" style='padding-left: 40px; padding-top: 40px;'>
+        <span style="font-size: 1.5em; font-weight: 600;">ABOUT <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
             <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
         </svg></span>
         <br/>
         <br/>
-        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{info}}</div>
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.25em;">{{info}}</div>
         <br/>
     </div>
     </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
     <div class="footer">
         <span></span>
-        <span style="color: black; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
+        <span style="color: black; text-align: right; font-weight: 700; font-family: 'Courier New', Courier, monospace; padding-right: 30px;">Created by Jahnabi Roy and Abhinav Rajesh Shripad.</span>
     </div>
     <script>
         function toggleHistoricalData() {
@@ -140,6 +146,7 @@
         const username = "{{ username }}";
         update_balance();
         async function update_balance() {
+            /// reads the balance from the user.db and renders it
             const response = await fetch('/get_balance');
             const data = await response.json();
             if (data) {
@@ -165,7 +172,6 @@
             }
         }
     </script>
-    
     <script>
         async function BUY(){
             update_balance();
@@ -188,6 +194,7 @@
             // Access responseData.message and responseData.stock_quantity here
 
             document.getElementById('response').innerText = responseData.message;
+            ///console.log(responseData.message);
             if (responseData.message == "BOUGHT SUCCESSFULLY!") {
                 document.getElementById('response').style.color = "green";
             }
@@ -240,7 +247,6 @@
                 const startDate = document.getElementById('startDate').value;
                 const endDate = document.getElementById('endDate').value;
                 const stock = '{{stock_name}}';
-                console.log(stock);
                 const response = await fetch(`/query?stock=${stock}&startDate=${startDate}&endDate=${endDate}&stock=${stock}`,{
                     method: 'POST',  // Use the POST method
                     headers: {
@@ -255,7 +261,6 @@
         
                 const data = await response.json();
         
-                ///console.log(data);
         
                 let dates  =[];
                 let prices =[];
@@ -264,8 +269,6 @@
                     dates.push(entry[0]);
                     prices.push(entry[1]);
                 }
-                console.log(dates)
-                console.log(prices)
                 const ctx = document.getElementById('chartContainer').getContext('2d');
                 const existingChart = Chart.getChart(ctx);
                 if (existingChart) {

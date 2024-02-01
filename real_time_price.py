@@ -5,6 +5,7 @@ import time
 
 
 def get_soup(ticker, exchange):
+    # gives the soup for a specific stock google webpage
     url = f"https://www.google.com/finance/quote/{ticker}:{exchange}"
     response = requests.get(url=url)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -12,6 +13,7 @@ def get_soup(ticker, exchange):
 
 
 def real_time_price(ticker, exchage):
+    # scraps the data using bs4 and selenium
     soup = get_soup(ticker=ticker, exchange=exchage)
     class1 = "YMlKec fxKbKc"
     class2 = "zzDege"
@@ -21,13 +23,7 @@ def real_time_price(ticker, exchage):
     class5 = "gyFHrc"
     class6 = "P6K39c"
     price = float(soup.find(class_=class1).text.replace(",", "").replace("₹", ""))
-    # change = float(soup.find("span", class_=class3).text)
-    # try:
-    #     change = soup.find("span", class_=class3).text
-    # except:
-    #     change = soup.find("span", class_=class7).text
     company_name = soup.find(class_=class2).text
-    # percentage_change = float(soup.find("div", class_=class4).text.replace("%", ""))
     previous = float(
         soup.find_all(class_=class6)[0].text.replace("₹", "").replace(",", "")
     )
@@ -37,7 +33,6 @@ def real_time_price(ticker, exchage):
         pe_ratio = float(soup.find_all(class_=class6)[4].text)
     except:
         pe_ratio = None
-    # print(company_name,price,change,percentage_change,pe_ratio)
     return company_name, price, change, percentage_change, pe_ratio
 
 
@@ -52,6 +47,7 @@ def get_prev_closing(ticker, exchage):
 
 
 def fetch_real_time():
+    # returns price, change, percentage change and pe ratio for all nifty 50 stocks
     df = pd.read_csv("ind_nifty50list.csv")
     dict = {}
     for symbol, exchange, exchange in zip(df["Symbol"], df["Exchange"], df["Exchange"]):
